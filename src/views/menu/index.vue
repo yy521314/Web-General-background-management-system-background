@@ -142,7 +142,11 @@ const state = reactive({
 		}
 	}
 }
+.el-dropdown-link {
+	cursor: pointer;
+}
 .el-header {
+	width: 249%;
 	display: flex;
 	height: 55px;
 	background: #262f3e;
@@ -151,18 +155,19 @@ const state = reactive({
 	justify-content: space-between;
 
 	// 欢迎语
-	.header-left-content {
+	.hander-left-content {
 		font-size: 14px;
 	}
-
-	.header-right-content {
-		width: 160px;
+	.hander-right-content {
+		width: 180px;
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
 	}
 }
+
 // 徽章
+
 .item {
 	cursor: pointer;
 }
