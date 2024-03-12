@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-11 13:06:42
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-12 18:38:33
+ * @LastEditTime: 2024-03-12 18:44:57
  * @FilePath: \Web-General-background-management-system-background\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -167,7 +167,7 @@ const Register = async () => {
 				message: "注册成功！",
 				type: "success",
 			});
-			activeName.value = true;
+			activeName.value = "first";
 		} else {
 			ElMessage.error("注册失败！");
 		}
