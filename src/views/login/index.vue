@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-11 13:06:42
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-12 16:50:46
+ * @LastEditTime: 2024-03-12 18:38:33
  * @FilePath: \Web-General-background-management-system-background\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -56,7 +56,9 @@
 										</div>
 										<div class="forget-login">
 											<span class="footer-button">
-												<el-button type="primary"
+												<el-button
+													type="primary"
+													@click="Login"
 													>登录</el-button
 												>
 											</span>
@@ -92,7 +94,12 @@
 											placeholder=" 请再次确认密码"
 										/>
 									</el-form-item>
-									<el-button type="primary">登录</el-button>
+									<el-button
+										type="primary"
+										@click="Register"
+										:plain="true"
+										>注册</el-button
+									>
 								</el-form>
 							</el-tab-pane>
 						</el-tabs>
@@ -113,6 +120,10 @@
 import { ref, reactive } from "vue";
 import forget from "./components/forget_password.vue";
 const activeName = ref("first");
+import { login, register } from "@/api/login";
+import { log } from "console";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
 
 interface formData {
 	account: null | number;
@@ -131,6 +142,39 @@ const registerData: formData = reactive({
 	repassword: "",
 });
 
+//login
+const router = useRouter();
+const Login = async () => {
+	const res = await login(loginData);
+	const { token } = res.data;
+	if (res.data.message === "登录成功") {
+		ElMessage({
+			message: "登录成功！",
+			type: "success",
+		});
+		localStorage.setItem("toke", token);
+		router.push("home");
+	} else {
+		ElMessage.error("登录失败，注意检查账号密码");
+	}
+};
+//注册
+const Register = async () => {
+	if (registerData.password == registerData.repassword) {
+		const res = await register(registerData);
+		if (res.data.message === "注册账号成功") {
+			ElMessage({
+				message: "注册成功！",
+				type: "success",
+			});
+			activeName.value = true;
+		} else {
+			ElMessage.error("注册失败！");
+		}
+	} else {
+		ElMessage.error("两次密码不一致");
+	}
+};
 // 忘记密码弹窗
 const forgetP = ref();
 // 打开忘记密码弹窗
