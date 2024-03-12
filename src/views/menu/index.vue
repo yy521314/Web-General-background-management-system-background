@@ -90,7 +90,7 @@
 									<el-dropdown-item
 										>更改头像</el-dropdown-item
 									>
-									<el-dropdown-item
+									<el-dropdown-item @click="goLogin"
 										>退出登录</el-dropdown-item
 									>
 								</el-dropdown-menu>
@@ -109,12 +109,18 @@
 <script lang="ts" setup>
 import { Menu as IconMenu } from "@element-plus/icons-vue";
 import { reactive, toRefs, ref } from "vue";
+import { useRouter } from "vue-router";
 const { circleUrl } = toRefs();
+const router = useRouter();
 
 const state = reactive({
 	circleUrl:
 		"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
 });
+
+const goLogin = () => {
+	router.push("login");
+};
 </script>
 
 <style lang="scss" scoped>

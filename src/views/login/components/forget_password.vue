@@ -108,7 +108,7 @@ const rules = reactive({
 			trigger: "blur",
 		},
 	],
-	psaaword: [
+	password: [
 		{
 			required: true,
 			message: "请输入您的新密码",
