@@ -13,7 +13,11 @@
 <script lang="ts" setup></script>
 
 <style lang="scss" scoped>
+<<<<<<< HEAD
 .shouye {
 	width: 90vw;
+=======
+div {
+>>>>>>> 58441a1a9c5b2627ca0c06458126cac016c3175c
 }
 </style>
