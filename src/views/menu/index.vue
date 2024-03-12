@@ -1,7 +1,7 @@
 <template>
 	<div class="common-layout">
-		<el-container>
-			<el-aside width="200px">
+		<el-container class="abc">
+			<el-aside width="250px">
 				<el-menu class="el-menu-vertical-demo" router>
 					<div class="title">通用后台管理系统</div>
 					<!-- 菜单栏 -->
@@ -119,34 +119,43 @@ const state = reactive({
 
 <style lang="scss" scoped>
 .common-layout {
-	.el-aside {
-		height: 100vh;
+	width: 87vw;
+}
+.el-container {
+	width: 50rem;
+}
+.el-aside {
+	height: 100vh;
+	background: #2b303b;
+	overflow: hidden;
+	width: 250px;
+	.title {
+		padding: 20px;
+		display: flex;
+		justify-content: center;
+		color: #fff;
+		background: #272c35;
+	}
+	.el-menu-item {
+		width: 20vh;
+		color: #fff;
+	}
+	// 菜单
+	.el-menu {
 		background: #2b303b;
-		overflow: hidden;
-		.title {
-			padding: 20px;
-			display: flex;
-			justify-content: center;
-			color: #fff;
-			background: #272c35;
-		}
-		.el-menu-item {
-			color: #fff;
-		}
-		// 菜单
-		.el-menu {
-			background: #2b303b;
-			width: 210px;
-			height: 100vh;
-			border-right: 0;
-		}
+		width: 250px;
+		height: 100vh;
+		border-right: 0;
+	}
+	.el-menu-item {
+		width: 250px;
 	}
 }
 .el-dropdown-link {
 	cursor: pointer;
 }
 .el-header {
-	width: 249%;
+	width: 73vw;
 	display: flex;
 	height: 55px;
 	background: #262f3e;
@@ -173,6 +182,7 @@ const state = reactive({
 }
 
 .el-main {
+	width: 73vw;
 	--el-main-padding: 0;
 	background-color: #f3f4fa;
 }

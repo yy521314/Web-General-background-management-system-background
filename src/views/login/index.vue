@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-11 13:06:42
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-11 18:53:33
+ * @LastEditTime: 2024-03-12 16:50:46
  * @FilePath: \Web-General-background-management-system-background\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -141,25 +141,33 @@ const openForget = () => {
 
 <style lang="scss" scoped>
 .common-layout {
+	width: 1280px;
+	background: url("@/assets/code.png") no-repeat center;
 	align-items: flex-start;
+	overflow: hidden;
 }
 .header-wrapped {
 	display: flex;
 	justify-content: space-around;
+	background-color: black;
+	opacity: 0.6;
 	.header-content {
+		color: white;
 		width: 1200px;
 		margin: 0 auto;
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
+		font-size: 20px;
+		font-weight: 500;
 		.welcome {
 			font-style: 13px;
+			font-weight: 300;
 		}
 	}
 }
 .el-main {
 	--el-main-padding: 0px;
-	background-image: url("@/assets/code.png");
 	height: 600px;
 	.login_wrapped {
 		width: 1200px;
@@ -176,7 +184,9 @@ const openForget = () => {
 			height: 350px;
 			float: right;
 			position: relative;
-			top: 14%;
+			top: 15%;
+			right: 50%;
+			transform: translate(175px);
 			.el-form-item {
 				margin-top: 20px;
 			}
