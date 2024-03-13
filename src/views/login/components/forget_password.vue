@@ -21,7 +21,7 @@
 			</el-form-item>
 			<el-form-item label="请输入您的个人邮箱" prop="email">
 				<el-input
-					v-model="fotgetData.password"
+					v-model="fotgetData.email"
 					placeholder="请输入您的个人邮箱"
 				/>
 			</el-form-item>
@@ -32,8 +32,8 @@
 				<el-button @click="state.forgetPasswordDialog = false"
 					>取消</el-button
 				>
-				<el-button type="primary" @click="openChangepassword">
-					确定
+				<el-button type="primary" @click="verifyAccount">
+					下一步
 				</el-button>
 			</div>
 		</template>
@@ -54,13 +54,15 @@
 		>
 			<el-form-item label="新密码" prop="password">
 				<el-input
-					v-model="fotgetData.account"
+					v-model="fotgetData.password"
+					show-password
 					placeholder="请输入您的新密码"
 				/>
 			</el-form-item>
 			<el-form-item label="再次确认您的新密码" prop="repassword">
 				<el-input
-					v-model="fotgetData.password"
+					v-model="fotgetData.repassword"
+					show-password
 					placeholder="再次确认您的新密码"
 				/>
 			</el-form-item>
@@ -71,8 +73,8 @@
 				<el-button @click="state.changePasswordDialog = false"
 					>取消</el-button
 				>
-				<el-button type="primary" @click="openChangepassword">
-					下一步
+				<el-button type="primary" @click="resetPassword">
+					确定
 				</el-button>
 			</div>
 		</template>
@@ -80,6 +82,9 @@
 </template>
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
+import { verify, reset } from "@/api/login";
+import { ElMessage } from "element-plus";
+import type { FormProps } from "element-plus";
 const labelPosition = ref("top");
 interface fotgetData {
 	account: number | null;
@@ -133,9 +138,38 @@ const open = () => {
 	state.forgetPasswordDialog = true;
 };
 //下一步修该密码密码弹窗
-const openChangepassword = () => {
-	state.forgetPasswordDialog = false;
-	state.changePasswordDialog = true;
+const verifyAccount = async () => {
+	const res = (await verify(fotgetData)) as any;
+	console.log(res);
+	if (res.data.status == 0) {
+		ElMessage({
+			message: "验证成功",
+			type: "success",
+		});
+		// localStorage.setItem 存放到浏览器的本地存储空间
+		// sessionStorage.setItem 存放到浏览器的会话存储空间
+		localStorage.setItem("id", res.data.id);
+		state.forgetPasswordDialog = false;
+		state.changePasswordDialog = true;
+	} else {
+		ElMessage.error("验证失败");
+	}
+};
+// 重置密码;
+const resetPassword = async () => {
+	if (fotgetData.password == fotgetData.repassword) {
+		const newPassword = fotgetData.password;
+		const id = localStorage.getItem("id");
+		const res = await reset({ newPassword, id });
+		if (res.data.status == 0) {
+			ElMessage({
+				message: "修该成功",
+				type: "success",
+			});
+		} else {
+			ElMessage.error("修该失败，检查密码是否一致");
+		}
+	}
 };
 
 defineExpose({
