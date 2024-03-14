@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-13 14:48:23
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-14 17:32:43
+ * @LastEditTime: 2024-03-14 19:20:51
  * @FilePath: \Web-General-background-management-system-background\src\views\set\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -42,7 +42,7 @@
 						<span>用户账号:</span>
 						<div class="account-infor-content">
 							<el-input
-								v-model="AccountDetailData.account"
+								v-model="userStore.account"
 								disabled
 							></el-input>
 						</div>
@@ -50,17 +50,22 @@
 					<div class="account-infor-wrapped">
 						<span>用户密码:</span>
 						<div class="account-infor-content">
-							<el-button type="primary">修该密码</el-button>
+							<el-button
+								type="primary"
+								@click="openChangePassword"
+								>修该密码</el-button
+							>
 						</div>
 					</div>
 					<div class="account-infor-wrapped">
 						<span>用户性名:</span>
 						<div class="account-infor-content">
-							<el-input
-								v-model="AccountDetailData.name"
-							></el-input>
+							<el-input v-model="userStore.name"></el-input>
 							<div class="account-infor-button">
-								<el-button type="primary" large="small"
+								<el-button
+									type="primary"
+									large="small"
+									@click="saveName"
 									>保存</el-button
 								>
 							</div>
@@ -69,12 +74,15 @@
 					<div class="account-infor-wrapped">
 						<span>用户性别:</span>
 						<div class="account-infor-content">
-							<el-select v-model="AccountDetailData.sex">
-								<el-option label="男" value="man"></el-option>
-								<el-option label="女" value="woman"></el-option>
+							<el-select v-model="userStore.sex">
+								<el-option label="男" value="男"></el-option>
+								<el-option label="女" value="女"></el-option>
 							</el-select>
 							<div class="account-infor-button">
-								<el-button type="primary" large="small"
+								<el-button
+									type="primary"
+									large="small"
+									@click="saveSex"
 									>保存</el-button
 								>
 							</div>
@@ -84,7 +92,7 @@
 						<span>用户身份:</span>
 						<div class="account-infor-content">
 							<el-input
-								v-model="AccountDetailData.identify"
+								v-model="userStore.identity"
 								disabled
 							></el-input>
 						</div>
@@ -93,7 +101,7 @@
 						<span>用户部门:</span>
 						<div class="account-infor-content">
 							<el-input
-								v-model="AccountDetailData.department"
+								v-model="userStore.department"
 								disabled
 							></el-input>
 						</div>
@@ -101,11 +109,12 @@
 					<div class="account-infor-wrapped">
 						<span>用户邮箱:</span>
 						<div class="account-infor-content">
-							<el-input
-								v-model="AccountDetailData.email"
-							></el-input>
+							<el-input v-model="userStore.email"></el-input>
 							<div class="account-infor-button">
-								<el-button type="primary" large="small"
+								<el-button
+									type="primary"
+									large="small"
+									@click="saveEmail"
 									>保存</el-button
 								>
 							</div>
@@ -125,6 +134,7 @@
 			</el-tabs>
 		</div>
 	</div>
+	<change ref="changeP"></change>
 </template>
 
 <script lang="ts" setup>
@@ -139,8 +149,10 @@ import { useUserInfor } from "@/stores/userinfor";
 import { es } from "element-plus/es/locale";
 import { type } from "os";
 import { bindAccount } from "@/api/userinfor";
+import change from "./components/change_password.vue";
+import { changeName, changeSex, changeEmail } from "@/api/userinfor";
 const userStore = useUserInfor();
-
+const changeP = ref();
 //头像上传成功的函数
 const handleAvatarSuccess: UploadProps["onSuccess"] = (response) => {
 	if (response.status == 0) {
@@ -186,7 +198,51 @@ const breadcrumb = ref();
 const item = ref({
 	first: "系统设置",
 });
-//标签页
+//修该密码弹窗
+const openChangePassword = () => {
+	changeP.value.open();
+};
+//修改性名
+const saveName = async () => {
+	const res = await changeName(sessionStorage.getItem("id"), userStore.name);
+	if (res.data.status == 0) {
+		ElMessage({
+			message: "更新成功",
+			type: "success",
+		});
+	} else {
+		ElMessage.error("修改失败！请重新入");
+	}
+};
+//修改性别
+const saveSex = async () => {
+	const res = await changeSex(sessionStorage.getItem("id"), userStore.sex);
+	console.log(res);
+
+	if (res.data.status == 0) {
+		ElMessage({
+			message: "更新成功",
+			type: "success",
+		});
+	} else {
+		ElMessage.error("修改失败！请重新入");
+	}
+};
+//修改邮箱
+const saveEmail = async () => {
+	const res = await changeEmail(
+		sessionStorage.getItem("id"),
+		userStore.email
+	);
+	if (res.data.status == 0) {
+		ElMessage({
+			message: "更新成功",
+			type: "success",
+		});
+	} else {
+		ElMessage.error("修改失败！请检查是否有格式问题");
+	}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -224,6 +280,9 @@ const item = ref({
 						width: 200px;
 						height: 200px;
 					}
+				}
+				.el-select {
+					width: 60px;
 				}
 			}
 		}

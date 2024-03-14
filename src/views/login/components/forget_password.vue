@@ -1,3 +1,11 @@
+<!--
+ * @Author: 'yang' '1173278084@qq.com'
+ * @Date: 2024-03-11 23:32:06
+ * @LastEditors: 'yang' '1173278084@qq.com'
+ * @LastEditTime: 2024-03-14 18:22:53
+ * @FilePath: \Web-General-background-management-system-background\src\views\login\components\forget_password.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
 	<!-- 忘记密码 -->
 	<el-dialog
@@ -163,11 +171,11 @@ const resetPassword = async () => {
 		const res = await reset({ newPassword, id });
 		if (res.data.status == 0) {
 			ElMessage({
-				message: "修该成功",
+				message: "修改成功",
 				type: "success",
 			});
 		} else {
-			ElMessage.error("修该失败，检查密码是否一致");
+			ElMessage.error("修改失败，检查密码是否一致");
 		}
 	}
 };

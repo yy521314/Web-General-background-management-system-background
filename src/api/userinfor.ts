@@ -31,9 +31,9 @@ export const changePassword = (
 		url: "/user/changePassword",
 		method: "POST",
 		data: {
-			id,
 			oldPassword,
 			newPassword,
+			id,
 		},
 	});
 };
@@ -49,13 +49,13 @@ export const changeName = (id: number, name: string) => {
 	});
 };
 //修该性别
-export const changeSex = (id: number, name: string) => {
+export const changeSex = (id: number, sex: string) => {
 	return instance({
 		url: "/user/changeSex",
 		method: "POST",
 		data: {
 			id,
-			name,
+			sex,
 		},
 	});
 };
