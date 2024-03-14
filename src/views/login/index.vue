@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-11 13:06:42
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-14 18:51:20
+ * @LastEditTime: 2024-03-14 23:36:31
  * @FilePath: \Web-General-background-management-system-background\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -152,8 +152,8 @@ const router = useRouter();
 const Login = async () => {
 	const res = await login(loginData);
 	const { token } = res.data;
-	const { id } = res.data.results;
 	if (res.data.message === "登录成功") {
+		const { id } = res.data.results;
 		ElMessage({
 			message: "登录成功！",
 			type: "success",
