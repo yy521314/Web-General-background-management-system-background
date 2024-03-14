@@ -75,11 +75,11 @@
 			<el-container>
 				<el-header>
 					<span class="hander-left-content"
-						>尊敬的 沥青 欢迎您登录本系统</span
+						>尊敬的 {{ store.name }} 欢迎您登录本系统</span
 					>
 					<div class="hander-right-content">
 						<el-icon><Message /></el-icon>
-						<el-avatar :size="24" :src="circleUrl" />
+						<el-avatar :size="24" :src="store.imageUrl" />
 						<el-dropdown>
 							<span class="el-dropdown-link"> 设置 </span>
 							<template #dropdown>
@@ -108,15 +108,10 @@
 
 <script lang="ts" setup>
 import { Menu as IconMenu } from "@element-plus/icons-vue";
-import { reactive, toRefs, ref } from "vue";
 import { useRouter } from "vue-router";
-const { circleUrl } = toRefs();
 const router = useRouter();
-
-const state = reactive({
-	circleUrl:
-		"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-});
+import { useUserInfor } from "@/stores/userinfor";
+const store = useUserInfor();
 
 const goLogin = () => {
 	router.push("login");
