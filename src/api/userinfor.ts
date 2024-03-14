@@ -10,13 +10,13 @@ export const getUserInfor = (id: number) => {
 	});
 };
 //绑定账号
-export const bindAccount = (account: any, onlyid: any, url: any) => {
+export const bindAccount = (account: any, onlyId: any, url: any) => {
 	return instance({
 		url: "/user/bindAccount",
 		method: "POST",
 		data: {
 			account,
-			onlyid,
+			onlyId,
 			url,
 		},
 	});

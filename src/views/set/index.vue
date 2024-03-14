@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-13 14:48:23
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-14 17:09:39
+ * @LastEditTime: 2024-03-14 17:32:43
  * @FilePath: \Web-General-background-management-system-background\src\views\set\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -151,11 +151,7 @@ const handleAvatarSuccess: UploadProps["onSuccess"] = (response) => {
 			message: "更新成功",
 			type: "success",
 		});
-		console.log(userStore);
-
 		(async () => {
-			console.log(123);
-
 			await bindAccount(userStore.account, response.onlyId, response.url);
 		})();
 	} else {
@@ -222,6 +218,12 @@ const item = ref({
 				margin-right: 16px;
 				.account-infor-button {
 					margin-left: 20px;
+				}
+				.el-upload {
+					img {
+						width: 200px;
+						height: 200px;
+					}
 				}
 			}
 		}
