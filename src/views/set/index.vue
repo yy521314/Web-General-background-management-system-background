@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-13 14:48:23
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-13 22:47:26
+ * @LastEditTime: 2024-03-14 17:09:39
  * @FilePath: \Web-General-background-management-system-background\src\views\set\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -22,7 +22,7 @@
 						<div class="account-infor-content">
 							<el-upload
 								class=""
-								action="https://127.0.0.1:3007/user/uploadAvatar"
+								action="http://127.0.0.1:3007/user/uploadAvatar"
 								:show-file-list="false"
 								:on-success="handleAvatarSuccess"
 								:before-upload="beforeAvatarUpload"
@@ -141,32 +141,28 @@ import { type } from "os";
 import { bindAccount } from "@/api/userinfor";
 const userStore = useUserInfor();
 
-const imageUrl = ref("");
 //头像上传成功的函数
 const handleAvatarSuccess: UploadProps["onSuccess"] = (response) => {
-	// imageUrl.value = URL.createObjectURL(uploadFile.raw!);
-	console.log(response);
+	if (response.status == 0) {
+		userStore.$patch({
+			imageUrl: response.url,
+		});
+		ElMessage({
+			message: "更新成功",
+			type: "success",
+		});
+		console.log(userStore);
 
-	// if (response.state == 0) {
-	// 	userStore.$patch({
-	// 		imageUrl: response.url,
-	// 	});
-	// 	ElMessage({
-	// 		message: "更新成功",
-	// 		type: "success",
-	// 	}),
-	// 		(async () => {
-	// 			await bindAccount(
-	// 				userStore.account,
-	// 				response.onlyId,
-	// 				response.url
-	// 			);
-	// 		})();
-	// } else {
-	// 	ElMessage.error("更新头像失败！请重新上传");
-	// }
+		(async () => {
+			console.log(123);
+
+			await bindAccount(userStore.account, response.onlyId, response.url);
+		})();
+	} else {
+		ElMessage.error("更新头像失败！请重新上传");
+	}
 };
-//头像上传之前的函数
+// 头像上传之前的函数
 const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
 	if (rawFile.type !== "image/jpeg") {
 		ElMessage.error("Avatar picture must be JPG format!");
