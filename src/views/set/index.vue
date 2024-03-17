@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-13 14:48:23
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-14 19:20:51
+ * @LastEditTime: 2024-03-17 18:33:50
  * @FilePath: \Web-General-background-management-system-background\src\views\set\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -193,8 +193,8 @@ const AccountDetailData = reactive({
 
 //默认打开标签页
 const activeName = ref("first");
-const breadcrumb = ref();
 //面包屑
+const breadcrumb = ref();
 const item = ref({
 	first: "系统设置",
 });
@@ -257,7 +257,7 @@ const saveEmail = async () => {
 .common-wrapp {
 	padding: 8px;
 	background: #f5f5f5;
-	height: calc(100vh - 85px);
+	height: calc(100vh - 101px);
 	//内容
 	.common-content {
 		padding: 0 10px;
