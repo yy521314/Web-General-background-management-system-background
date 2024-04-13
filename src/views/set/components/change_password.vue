@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onBeforeUnmount } from "vue";
 import { changePassword } from "@/api/userinfor";
 import { ElMessage } from "element-plus";
 import type { FormProps } from "element-plus";
@@ -92,7 +92,7 @@ const changeUserPassword = async () => {
 			passwordData.oldPassword,
 			passwordData.newPassword
 		);
-		if (res.data.status == 0) {
+		if (res.status == 0) {
 			ElMessage({
 				message: "修改成功",
 				type: "success",
@@ -107,6 +107,9 @@ const changeUserPassword = async () => {
 
 defineExpose({
 	open,
+});
+onBeforeUnmount(() => {
+	bus.all.clear();
 });
 </script>
 

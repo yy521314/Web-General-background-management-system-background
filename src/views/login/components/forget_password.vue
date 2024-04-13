@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-11 23:32:06
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-14 23:41:26
+ * @LastEditTime: 2024-04-13 21:45:48
  * @FilePath: \Web-General-background-management-system-background\src\views\login\components\forget_password.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -89,7 +89,7 @@
 	</el-dialog>
 </template>
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onBeforeUnmount } from "vue";
 import { verify, reset } from "@/api/login";
 import { ElMessage } from "element-plus";
 import type { FormProps } from "element-plus";
@@ -149,14 +149,14 @@ const open = () => {
 const verifyAccount = async () => {
 	const res = (await verify(fotgetData)) as any;
 	console.log(res);
-	if (res.data.status == 0) {
+	if (res.status == 0) {
 		ElMessage({
 			message: "验证成功",
 			type: "success",
 		});
 		// localStorage.setItem 存放到浏览器的本地存储空间
 		// sessionStorage.setItem 存放到浏览器的会话存储空间
-		localStorage.setItem("id", res.data.id);
+		localStorage.setItem("id", res.id);
 		state.forgetPasswordDialog = false;
 		state.changePasswordDialog = true;
 	} else {
@@ -169,7 +169,7 @@ const resetPassword = async () => {
 		const newPassword = fotgetData.password;
 		const id = localStorage.getItem("id");
 		const res = await reset({ newPassword, id });
-		if (res.data.status == 0) {
+		if (res.status == 0) {
 			ElMessage({
 				message: "修改成功",
 				type: "success",

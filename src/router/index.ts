@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-10 22:37:20
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-12 17:28:53
+ * @LastEditTime: 2024-04-13 15:56:33
  * @FilePath: \Web-General-background-management-system-background\src\router\index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -32,6 +32,35 @@ const routes = [
 				name: "set",
 				path: "/set",
 				component: () => import("@/views/set/index.vue"),
+			},
+			{
+				name: "overview",
+				path: "/overview",
+				component: () => import("@/views/overview/index.vue"),
+			},
+			{
+				name: "product_manage",
+				path: "/product_manage",
+				component: () =>
+					import("@/views/user_manage/product_manage/index.vue"),
+			},
+			{
+				name: "message_manage",
+				path: "/message_manage",
+				component: () =>
+					import("@/views/user_manage/message_manage/index.vue"),
+			},
+			{
+				name: "user_list",
+				path: "/user_list",
+				component: () =>
+					import("@/views/user_manage/user_list/index.vue"),
+			},
+			{
+				name: "users_manage",
+				path: "/users_manage",
+				component: () =>
+					import("@/views/user_manage/users_manage/index.vue"),
 			},
 		],
 	},

@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-11 23:32:06
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-17 20:54:06
+ * @LastEditTime: 2024-04-12 21:41:50
  * @FilePath: \Web-General-background-management-system-background\src\views\home\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,36 +12,29 @@
 		<!-- 轮播图 -->
 		<div class="swiper-wrapped">
 			<el-carousel interval="4000" height="280px" type="card">
-				<el-carousel-item v-for="item in 4" :key="item">
-					<h3 class="small justify-center" text="2xl">
-						{{ item }}
-					</h3>
+				<el-carousel-item
+					v-for="(item, index) in imageUrl"
+					:key="index"
+				>
+					<img
+						v-if="imageUrl[index]"
+						:src="imageUrl[index]"
+						class="swiper"
+					/>
 				</el-carousel-item>
 			</el-carousel>
 		</div>
 		<!-- 栅格布局 -->
 		<div class="layout-wrapped">
 			<el-row :gutter="20">
-				<el-col :span="6"
+				<el-col
+					:span="6"
+					v-for="(item, index) in companyIntroduce"
+					:key="index"
 					><div class="company-message-area">
-						<span>公司介绍</span>
-					</div></el-col
-				>
-				<el-col :span="6"
-					><div class="company-message-area">
-						<span>公司架构</span>
-					</div></el-col
-				>
-				<el-col :span="6"
-					><div class="company-message-area">
-						<span>公司战略</span>
-					</div></el-col
-				>
-				<el-col :span="6"
-					><div class="company-message-area">
-						<span>高层介绍</span>
-					</div></el-col
-				>
+						<span>{{ item.set_name }}</span>
+						<div v-html="item.set_text"></div></div
+				></el-col>
 			</el-row>
 		</div>
 		<!-- 表格外壳 -->
@@ -78,6 +71,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import breadCrumb from "@/components/bread_crumb.vue";
+import { getAllSwiper, getAllCompanyIntroduce } from "@/api/setting";
 // 面包屑
 const breadcrumb = ref();
 const item = ref({
@@ -90,6 +84,21 @@ const tableData = [
 		address: "No. 189, Grove St, Los Angeles",
 	},
 ];
+// 轮播图
+const imageUrl = ref([]);
+// 获取轮播图
+const returnAllSwiper = async () => {
+	imageUrl.value = await getAllSwiper();
+};
+returnAllSwiper();
+// 公司介绍
+const companyIntroduce = ref([]);
+const returnAllCompanyIntroduce = async () => {
+	const res = await getAllCompanyIntroduce();
+	const [...intro] = res;
+	companyIntroduce.value = intro;
+};
+returnAllCompanyIntroduce();
 </script>
 
 <style lang="scss" scoped>
@@ -171,6 +180,10 @@ const tableData = [
 			margin-bottom: 5px;
 			border-bottom: 1px solid #ea0709;
 		}
+	}
+	.swiper {
+		width: 100%;
+		height: 100%;
 	}
 }
 //轮播图
