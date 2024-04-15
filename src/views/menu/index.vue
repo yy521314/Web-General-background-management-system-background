@@ -3,7 +3,7 @@
 		<el-container class="abc">
 			<el-aside width="250px">
 				<el-menu class="el-menu-vertical-demo" router>
-					<div class="title">通用后台管理系统</div>
+					<div class="title">温馨客栈管理系统</div>
 					<!-- 菜单栏 -->
 					<el-menu-item index="home">
 						<el-icon><House /></el-icon>
@@ -42,11 +42,15 @@
 							<el-icon><HomeFilled /></el-icon>
 							<span>产品管理</span>
 						</template>
-						<el-menu-item-group title="入库管理">
-							<el-menu-item index="4-1">产品管理</el-menu-item>
+						<el-menu-item-group title="入库出库管理">
+							<el-menu-item index="product_manage_list"
+								>产品列表</el-menu-item
+							>
 						</el-menu-item-group>
-						<el-menu-item-group title="出库管理">
-							<el-menu-item index="4-2">出库管理</el-menu-item>
+						<el-menu-item-group title="出库数据">
+							<el-menu-item index="out_product_manage_list"
+								>出库列表清单</el-menu-item
+							>
 						</el-menu-item-group>
 					</el-sub-menu>
 					<!-- 消息管理 -->
@@ -55,14 +59,14 @@
 							<el-icon><ChatRound /></el-icon>
 							<span>消息管理</span>
 						</template>
-						<el-menu-item-group title="消息管理">
-							<el-menu-item index="5-1">消息列表</el-menu-item>
-						</el-menu-item-group>
-						<el-menu-item-group title="回收站">
-							<el-menu-item index="5-2">回收站</el-menu-item>
-						</el-menu-item-group>
+
+						<el-menu-item index="message_list"
+							>消息列表</el-menu-item
+						>
+
+						<el-menu-item index="recycle">回收站</el-menu-item>
 					</el-sub-menu>
-					<el-menu-item index="6">
+					<el-menu-item index="file">
 						<el-icon><Memo /></el-icon>
 						<span>合同管理</span>
 					</el-menu-item>

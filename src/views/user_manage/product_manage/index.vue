@@ -70,9 +70,9 @@
 			/>
 		</div>
 	</div>
-	<createA ref="Create" @success="getAdminlist"></createA>
-	<editA ref="edit_admin" @success="getAdminlist"></editA>
-	<deleteA ref="delete_admin" @success="getAdminlist"></deleteA>
+	<createA ref="Create"></createA>
+	<editA ref="edit_admin"></editA>
+	<deleteA ref="delete_admin"></deleteA>
 </template>
 
 <script lang="ts" setup>
@@ -101,7 +101,7 @@ const item = ref({
 const adminAccount = ref<number>();
 // 表格内容
 const tableData = ref<object[]>([]);
-//控制弹窗
+//新建管理员
 const Create = ref();
 const openCreate = (id: number) => {
 	bus.emit("createId", id);
@@ -128,8 +128,8 @@ const openDelete = (id: number) => {
 //对管理员进行搜索
 const kind = "产品管理员";
 const searchAdmin = async () => {
-	if (adminAccount == NaN) {
-		getAdminlist();
+	if (adminAccount.value == "") {
+		getFirstPageList();
 	} else {
 		tableData.value = await searchUser(adminAccount.value, kind);
 	}
@@ -163,6 +163,33 @@ const currentChange = async (value: number) => {
 		"产品管理员"
 	);
 };
+//bus
+bus.on("adminDialogOff", async (id: number) => {
+	// 当前页数
+	const current = paginationData.currentPage;
+	// 1为创建管理员
+	if (id == 1) {
+		getFirstPageList();
+	}
+	// 2为编辑管理员
+	if (id == 2) {
+		tableData.value = await returnListData(
+			paginationData.currentPage,
+			"产品管理员"
+		);
+	}
+	// 3为对管理员进行降职
+	if (id == 3) {
+		tableData.value = await returnListData(
+			paginationData.currentPage,
+			"产品管理员"
+		);
+		if (tableData.value.length == 0) {
+			paginationData.currentPage = current - 1;
+			returnAdminListLength();
+		}
+	}
+});
 // 获取管理员的数量
 const getAdminlists = () => {
 	getAdminListLength("产品管理员");
@@ -170,10 +197,7 @@ const getAdminlists = () => {
 getAdminlists();
 // 当搜索内容清空后, 返回当前页面的数据;
 const clearInput = async () => {
-	tableData.value = await returnListData(
-		paginationData.currentPage,
-		"产品管理员"
-	);
+	getFirstPageList();
 };
 </script>
 

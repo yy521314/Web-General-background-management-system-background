@@ -65,7 +65,6 @@ import { ElMessage } from "element-plus";
 
 //title动态标题
 const title = ref();
-const emit = defineEmits(["success"]);
 // 表格内容
 interface FormData {
 	id?: number | null;
@@ -118,7 +117,6 @@ const edit = async () => {
 		});
 		bus.emit("adminDialogOff", 2);
 		dialogFormVisible.value = false;
-		emit("success");
 	} else {
 		ElMessage.error("编辑管理员信息失败");
 		dialogFormVisible.value = false;

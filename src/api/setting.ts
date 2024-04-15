@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-17 22:03:10
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-12 17:37:59
+ * @LastEditTime: 2024-04-15 14:18:00
  * @FilePath: \Web-General-background-management-system-background\src\api\setting.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -56,6 +56,44 @@ export const getCompanyIntroduce = (set_name: string) => {
 export const getAllCompanyIntroduce = (set_name: string) => {
 	return instance({
 		url: "/set/getAllCompanyIntroduce",
+		method: "POST",
+	});
+};
+
+// 部门设置
+export const setDepartment = (data: any) => {
+	return instance({
+		url: "/set/setDepartment",
+		method: "POST",
+		data: {
+			set_value: data,
+		},
+	});
+};
+
+// 获取部门
+export const getDepartment = () => {
+	return instance({
+		url: "/set/getDepartment",
+		method: "POST",
+	});
+};
+
+// 产品设置
+// export const setProduct = (data: any) => {
+// 	return instance({
+// 		url: "/set/setProduct",
+// 		method: "POST",
+// 		data: {
+// 			set_value: data,
+// 		},
+// 	});
+// };
+
+// 获取产品
+export const getProduct = () => {
+	return instance({
+		url: "/set/getProduct",
 		method: "POST",
 	});
 };

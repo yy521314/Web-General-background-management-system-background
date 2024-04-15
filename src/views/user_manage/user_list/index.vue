@@ -12,27 +12,27 @@
 							v-model="adminAccount"
 							class="w-50 m-2"
 							size="large"
-							placeholder="输入账号进行搜索"
+							placeholder="账号搜索"
 							:prefix-icon="Search"
 							@change="searchUserByAccount()"
+							clearable
+							@clear="clearInput()"
 						/>
 					</div>
-					<div class="select-wrapped">
+					<!-- <div class="select-wrapped">
 						<el-select
 							v-model="department"
 							placeholder="请选择部门"
-							clearable
 							@change="searchForDepartment"
-							@clear="clearOperation"
 						>
 							<el-option
 								v-for="item in departmentData"
-								:key="item"
-								:label="item"
+								:key="item.id"
+								:label="item.name"
 								:value="item"
 							/>
-						</el-select>
-					</div>
+						</el-select> -->
+					<!-- </div> -->
 				</div>
 				<div class="button-wrapped">
 					<el-button plain type="primary" @click="banUserList"
@@ -118,10 +118,10 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onBeforeUnmount } from "vue";
-// import { Search } from "@element-plus/icons-vue";
-// import breadCrumb from "@/components/bread_crumb.vue";
-// import userinfo from "../components/user_infor.vue";
-// import { bus } from "@/utils/mitt.js";
+import { Search } from "@element-plus/icons-vue";
+import breadCrumb from "@/components/bread_crumb.vue";
+import userinfo from "../components/user_infor.vue";
+import { bus } from "@/utils/mitt";
 import {
 	searchUser,
 	searchDepartment,
@@ -131,8 +131,8 @@ import {
 	banUser,
 	hotUser,
 } from "@/api/userinfor.js";
-// import { getDepartment } from "@/api/setting";
-// import { ElMessage } from "element-plus";
+import { getDepartment } from "@/api/setting";
+import { ElMessage } from "element-plus";
 
 // 面包屑
 const breadcrumb = ref();
@@ -146,25 +146,14 @@ const adminAccount = ref<number>();
 // 表格内容
 const tableData = ref();
 // 通过账号进行搜索
-// const searchUserByAccount = async () => {
-// 	tableData.value = await searchUser(adminAccount.value, "用户");
-// };
-// 部门数据
-// const departmentData = ref([]);
-// const returnDepartment = async () => {
-// 	departmentData.value = await getDepartment();
-// };
-// returnDepartment();
-// 部门
-// const department = ref();
-// const searchForDepartment = async () => {
-// 	tableData.value = await searchDepartment(department.value);
-// };
-// 清空选择框
-// const clearOperation = () => {
-// getFirstPageList();
-// };
-
+const searchUserByAccount = async () => {
+	if (adminAccount.value == "") {
+		getFirstPageList();
+	} else {
+		tableData.value = await searchUser(adminAccount.value, "用户");
+	}
+};
+//分页
 // 分页数据
 const paginationData = reactive({
 	// 总页数
@@ -174,86 +163,106 @@ const paginationData = reactive({
 });
 const adminTotal = ref<number>(0);
 // 获取管理员的数量
-// const returnAdminListLength = async () => {
-// 	const res = await getAdminListLength("用户");
-// 	adminTotal.value = res.length;
-// 	paginationData.pageCount = Math.ceil(res.length / 10);
-// };
-// returnAdminListLength();
+const returnAdminListLength = async () => {
+	const res = await getAdminListLength("用户");
+	adminTotal.value = res.length;
+	paginationData.pageCount = Math.ceil(res.length / 10);
+};
+returnAdminListLength();
 // 默认获取第一页的数据
-// const getFirstPageList = async () => {
-// 	tableData.value = await returnListData(1, "用户");
-// };
-// getFirstPageList();
+const getFirstPageList = async () => {
+	tableData.value = await returnListData(1, "用户");
+};
+getFirstPageList();
 // 监听换页
-// const currentChange = async (value: number) => {
-// 	paginationData.currentPage = value;
-// 	tableData.value = await returnListData(value, "用户");
-// };
-
+const currentChange = async (value: number) => {
+	paginationData.currentPage = value;
+	tableData.value = await returnListData(paginationData.currentPage, "用户");
+};
 // 筛选冻结用户
-// const banUserList = async () => {
-// 	tableData.value = await getBanList();
-// };
+const banUserList = async () => {
+	tableData.value = await getBanList();
+};
 
 // 冻结用户
-// const banUserById = async (id: number) => {
-// 	const res = await banUser(id);
-// 	if (res.status == 0) {
-// 		ElMessage({
-// 			message: "冻结用户成功",
-// 			type: "success",
-// 		});
-// 		tableData.value = await returnListData(
-// 			paginationData.currentPage,
-// 			"用户"
-// 		);
-// 	} else {
-// 		ElMessage.error("冻结用户失败");
-// 	}
-// };
+const banUserById = async (id: number) => {
+	const res = await banUser(id);
+	if (res.status == 0) {
+		ElMessage({
+			message: "冻结用户成功",
+			type: "success",
+		});
+		tableData.value = await returnListData(
+			paginationData.currentPage,
+			"用户"
+		);
+	} else {
+		ElMessage.error("冻结用户失败");
+	}
+};
 
 // 解冻用户
-// const hotUserById = async (id: number) => {
-// 	const res = await hotUser(id);
-// 	if (res.status == 0) {
-// 		ElMessage({
-// 			message: "解冻用户成功",
-// 			type: "success",
-// 		});
-// 		tableData.value = await returnListData(
-// 			paginationData.currentPage,
-// 			"用户"
-// 		);
-// 	} else {
-// 		ElMessage.error("解冻用户失败");
-// 	}
-// };
+const hotUserById = async (id: number) => {
+	const res = await hotUser(id);
+	if (res.status == 0) {
+		ElMessage({
+			message: "解冻用户成功",
+			type: "success",
+		});
+		tableData.value = await returnListData(
+			paginationData.currentPage,
+			"用户"
+		);
+	} else {
+		ElMessage.error("解冻用户失败");
+	}
+};
 
-// const user_info = ref();
-// const openUser = (row: any) => {
-// 	bus.emit("userId", row);
-// 	user_info.value.open();
-// };
+const user_info = ref();
+const openUser = (row: any) => {
+	bus.emit("userId", row);
+	user_info.value.open();
+};
 
-// bus.on("offDialog", async (id: number) => {
-// 	// 当前页数
-// 	const current = paginationData.currentPage;
-// 	if (id) {
-// 		tableData.value = await returnListData(
-// 			paginationData.currentPage,
-// 			"用户"
-// 		);
-// 		if (tableData.value.length == 0) {
-// 			paginationData.currentPage = current - 1;
-// 			returnAdminListLength();
-// 		}
-// 	}
-// });
-
-// onBeforeUnmount(() => {
-// 	bus.all.clear();
-// });
+bus.on("offDialog", async (id: number) => {
+	// 当前页数
+	const current = paginationData.currentPage;
+	if (id) {
+		tableData.value = await returnListData(
+			paginationData.currentPage,
+			"用户"
+		);
+		if (tableData.value.length == 0) {
+			paginationData.currentPage = current - 1;
+			returnAdminListLength();
+		}
+	}
+});
+// 部门数据
+const departmentData = ref([]);
+const returnDepartment = async () => {
+	departmentData.value = await getDepartment();
+};
+returnDepartment();
+// 部门
+const department = ref();
+const searchForDepartment = async () => {
+	tableData.value = await searchDepartment(department.value);
+};
+// 当搜索内容清空后, 返回当前页面的数据;
+const clearInput = async () => {
+	getFirstPageList();
+};
+onBeforeUnmount(() => {
+	bus.all.clear();
+});
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.select-wrapped {
+	width: 100%;
+}
+.search-wrapped {
+	width: 100%;
+}
+</style>

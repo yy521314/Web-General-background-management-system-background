@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-13 14:48:23
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-12 22:09:13
+ * @LastEditTime: 2024-04-14 13:12:40
  * @FilePath: \Web-General-background-management-system-background\src\views\set\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -208,7 +208,68 @@
 					</div>
 				</el-tab-pane>
 				<el-tab-pane label="其他设置" name="fourth"
-					>其他设置</el-tab-pane
+					><div class="other-set">
+						<div class="department-set">
+							<span>部门设置</span>
+							<el-tag
+								v-for="tag in dynamicTags"
+								:key="tag"
+								class="mx-1"
+								closable
+								:disable-transitions="false"
+								@close="handleClose(tag)"
+							>
+								{{ tag }}
+							</el-tag>
+							<el-input
+								v-if="inputVisible"
+								ref="InputRef"
+								v-model="inputValue"
+								class="ml-1 w-20"
+								size="small"
+								@keyup.enter="handleInputConfirm"
+								@blur="handleInputConfirm"
+							/>
+							<el-button
+								v-else
+								class="button-new-tag ml-1"
+								size="small"
+								@click="showInput"
+							>
+								+ 添加部门
+							</el-button>
+						</div>
+						<div class="product-set">
+							<span>产品设置</span>
+							<el-tag
+								v-for="tag in dynamicProductTags"
+								:key="tag"
+								class="mx-1"
+								closable
+								:disable-transitions="false"
+								@close="handleProductClose(tag)"
+							>
+								{{ tag }}
+							</el-tag>
+							<el-input
+								v-if="inputProductVisible"
+								ref="InputProductRef"
+								v-model="inputProductValue"
+								class="ml-1 w-20"
+								size="small"
+								@keyup.enter="handleInputProductConfirm"
+								@blur="handleInputProductConfirm"
+							/>
+							<el-button
+								v-else
+								class="button-new-tag ml-1"
+								size="small"
+								@click="showProductInput"
+							>
+								+ 添加产品
+							</el-button>
+						</div>
+					</div></el-tab-pane
 				>
 			</el-tabs>
 		</div>
@@ -218,12 +279,10 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, nextTick, toRaw } from "vue";
 import breadCrumb from "@/components/bread_crumb.vue";
-import type { TabsPaneContext } from "element-plus";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElInput, UploadProps, TabsPaneContext } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import type { UploadProps } from "element-plus";
 import { reset } from "@/api/login";
 import { useUserInfor } from "@/stores/userinfor";
 import { es } from "element-plus/es/locale";
@@ -238,7 +297,13 @@ import {
 	getUserInfor,
 } from "@/api/userinfor";
 import { bus } from "@/utils/mitt";
-import { getCompanyName, changeCompanyName, getAllSwiper } from "@/api/setting";
+import {
+	getCompanyName,
+	changeCompanyName,
+	getAllSwiper,
+	setDepartment,
+	getDepartment,
+} from "@/api/setting";
 const userStore = useUserInfor();
 const changeP = ref();
 const editorP = ref();
@@ -425,6 +490,106 @@ const returnAllSwiper = async () => {
 	imageUrl.value = await getAllSwiper();
 };
 returnAllSwiper();
+//其他设置
+// 其他设置
+// setDepartment
+// getDepartment
+// 部门设置
+const inputValue = ref("");
+const dynamicTags = ref();
+const inputVisible = ref(false);
+const InputRef = ref<InstanceType<typeof ElInput>>();
+// 产品设置
+const inputProductValue = ref("");
+const dynamicProductTags = ref();
+const inputProductVisible = ref(false);
+const InputProductRef = ref<InstanceType<typeof ElInput>>();
+// 获取部门数据
+const returnDepartment = async () => {
+	dynamicTags.value = await getDepartment();
+};
+returnDepartment();
+// 获取产品数据
+// const returnProduct = async () => {
+// 	dynamicProductTags.value = await getProduct();
+// };
+// returnProduct();
+// 部门设置关闭时的函数
+const handleClose = async (tag: string) => {
+	dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1);
+	const res = await setDepartment(JSON.stringify(toRaw(dynamicTags.value)));
+	if (res.status == 0) {
+		ElMessage({
+			message: "删除部门成功",
+			type: "success",
+		});
+	} else {
+		ElMessage.error("删除部门失败，请重新输入！");
+	}
+};
+// 产品设置关闭时的函数
+// const handleProductClose = async (tag: string) => {
+// 	dynamicProductTags.value.splice(dynamicProductTags.value.indexOf(tag), 1)
+// 	const res = await setProduct(JSON.stringify(toRaw(dynamicProductTags.value)))
+// 	if (res.status == 0) {
+// 		ElMessage({
+// 			message: '删除产品成功',
+// 			type: 'success',
+// 		})
+// 	} else {
+// 		ElMessage.error('删除产品失败，请重新输入！')
+// 	}
+// }
+// 点击部门按钮出现输入框
+const showInput = () => {
+	inputVisible.value = true;
+	nextTick(() => {
+		InputRef.value!.input!.focus();
+	});
+};
+// 点击产品按钮出现输入框
+// const showProductInput = () => {
+// 	inputProductVisible.value = true
+// 	nextTick(() => {
+// 		InputProductRef.value!.input!.focus()
+// 	})
+// }
+// 输入数据后的一个函数 部门
+const handleInputConfirm = async () => {
+	if (inputValue.value) {
+		dynamicTags.value.push(inputValue.value);
+		const res = await setDepartment(
+			JSON.stringify(toRaw(dynamicTags.value))
+		);
+		if (res.status == 0) {
+			ElMessage({
+				message: "添加部门设置成功",
+				type: "success",
+			});
+		} else {
+			ElMessage.error("添加部门失败，请重新输入！");
+		}
+	}
+	inputVisible.value = false;
+	inputValue.value = "";
+};
+// 输入数据后的一个函数 产品
+// const handleInputProductConfirm = async () => {
+// 	if (inputProductValue.value) {
+// 		dynamicProductTags.value.push(inputProductValue.value)
+// 		const res = await setProduct(JSON.stringify(toRaw(dynamicProductTags.value)))
+// 		if (res.status == 0) {
+// 			ElMessage({
+// 				message: '添加产品设置成功',
+// 				type: 'success',
+// 			})
+// 		} else {
+// 			ElMessage.error('添加产品失败，请重新输入！')
+// 		}
+// 	}
+// 	inputProductVisible.value = false
+// 	inputProductValue.value = ''
+// }
 </script>
 
 <style lang="scss" scoped>
@@ -510,6 +675,45 @@ returnAllSwiper();
 	width: 178px;
 	height: 178px;
 	display: block;
+}
+// 其他设置
+.other-set {
+	padding-left: 50px;
+	font-size: 14px;
+
+	.department-set {
+		margin-bottom: 24px;
+
+		span {
+			margin-right: 24px;
+		}
+	}
+
+	.product-set {
+		span {
+			margin-right: 24px;
+		}
+	}
+}
+
+// 标签页
+.demo-tabs > .el-tabs__content {
+	padding: 32px;
+	color: #6b778c;
+	font-size: 32px;
+	font-weight: 600;
+}
+
+// 上传头像
+.avatar-uploader .avatar {
+	width: 178px;
+	height: 178px;
+	display: block;
+}
+
+// 输入框的长度
+:deep(.el-input) {
+	width: 240px;
 }
 </style>
 <style>

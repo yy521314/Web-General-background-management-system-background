@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-04-13 16:45:27
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-13 22:23:52
+ * @LastEditTime: 2024-04-14 22:17:25
  * @FilePath: \Web-General-background-management-system-background\src\views\user_manage\components\create_admin.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -47,7 +47,12 @@
 						v-model="formDataInfo.department"
 						placeholder="请选择部门"
 					>
-						<el-option label="总裁办" value="总裁办" />
+						<el-option
+							v-for="item in departmentData"
+							:key="item"
+							:label="item"
+							:value="item"
+						/>
 					</el-select>
 				</el-form-item>
 			</el-form>
@@ -65,23 +70,15 @@ import { reactive, ref, onBeforeUnmount } from "vue";
 import { bus } from "@/utils/mitt";
 import { createAdmin } from "@/api/userinfor.js";
 import { ElMessage } from "element-plus";
-
+import { getDepartment } from "@/api/setting";
+//获取部门信息
+const departmentData = ref([]);
+const returnDepartment = async () => {
+	departmentData.value = await getDepartment();
+};
+returnDepartment();
 //title动态标题
 const title = ref();
-const emit = defineEmits(["success"]);
-//bus接收
-bus.on("createId", (id: number) => {
-	if (id == 1) {
-		title.value = "新建产品管理员";
-	}
-	if (id == 2) {
-		title.value = "新建用户管理员";
-	}
-	if (id == 3) {
-		title.value = "新建消息管理员";
-	}
-});
-
 // 表格内容
 interface FormData {
 	account: number | null;
@@ -99,8 +96,24 @@ const formDataInfo: FormData = reactive({
 	sex: "",
 	email: "",
 	department: "",
-	identity: "产品管理员",
+	identity: "",
 });
+//bus接收
+bus.on("createId", (id: number) => {
+	if (id == 1) {
+		title.value = "新建产品管理员";
+		formDataInfo.identity = "产品管理员";
+	}
+	if (id == 2) {
+		title.value = "新建用户管理员";
+		formDataInfo.identity = "用户管理员";
+	}
+	if (id == 3) {
+		title.value = "新建消息管理员";
+		formDataInfo.identity = "消息管理员";
+	}
+});
+
 //规则
 const rules = reactive({
 	account: [
@@ -135,7 +148,6 @@ const addAdmin = async () => {
 			type: "success",
 		});
 		bus.emit("adminDialogOff", 1);
-		emit("success");
 		dialogFormVisible.value = false;
 		formDataInfo.length = 0;
 		formDataInfo.splice(0, tableData.length);

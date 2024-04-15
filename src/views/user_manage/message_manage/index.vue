@@ -1,5 +1,5 @@
 <template>
-	<breadCrumb ref="breadcrumb" :item="item"></breadCrumb>
+	<breadCrumb ref="breadcrumb" separator="/" :item="item"></breadCrumb>
 	<div class="table-wrapped">
 		<!-- 顶部 -->
 		<div class="table-top">
@@ -14,8 +14,6 @@
 						placeholder="输入账号进行搜索"
 						:prefix-icon="Search"
 						@change="searchAdmin()"
-						clearable
-						@clear="clearInput()"
 					/>
 				</div>
 				<div class="button-wrapped">
@@ -30,15 +28,9 @@
 					<el-table-column type="index" width="50" />
 					<el-table-column prop="account" label="账号" />
 					<el-table-column prop="name" label="姓名" />
-					<el-table-column prop="sex" label="性别" />
 					<el-table-column prop="department" label="部门" />
 					<el-table-column prop="email" label="邮箱" />
-					<el-table-column prop="update_time" label="更新时间">
-						<template #default="{ row }">
-							<div>{{ row.update_time?.slice(0, 10) }}</div>
-						</template>
-					</el-table-column>
-					<el-table-column label="操作" width="200">
+					<el-table-column label="操作">
 						<template #default="{ row }">
 							<div>
 								<el-button
@@ -61,53 +53,130 @@
 		<div class="table-footer">
 			<el-pagination
 				:page-size="1"
+				:current-page="paginationData.currentPage"
 				:pager-count="7"
 				:total="adminTotal"
+				:page-count="paginationData.pageCount"
+				@current-change="currentChange"
 				layout="prev, pager, next"
 			/>
 		</div>
 	</div>
 	<createA ref="Create"></createA>
-	<!-- <editA ref="Edit"></editA>
-	<deleteA ref="Delete"></deleteA> -->
+	<editA ref="edit_admin"></editA>
+	<deleteA ref="delete_admin"></deleteA>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onBeforeUnmount } from "vue";
+import { ref, reactive, onBeforeUnmount } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import breadCrumb from "@/components/bread_crumb.vue";
 import createA from "../components/create_admin.vue";
-// import editA from "../components/edit_admin.vue";
-// import deleteA from "../components/delete_admin.vue";
-import { bus } from "@/utils/mitt";
-// import {
-// 	searchUser,
-// 	getAdminListLength,
-// 	returnListData,
-// } from "@/api/userinfor.js";
+import editA from "../components/edit_admin.vue";
+import deleteA from "../components/delete_admin.vue";
+import {
+	getAdminList,
+	searchUser,
+	getAdminListLength,
+	returnListData,
+} from "@/api/userinfor";
+import { bus } from "@/utils/mitt.js";
 // 面包屑
 const breadcrumb = ref();
 // 面包屑参数
 const item = ref({
 	first: "用户管理",
-	second: "产品管理员",
+	second: "消息管理员",
 });
-//搜索框
-// 搜索框的modelValue
-const adminAccount = ref<number>();
+const adminAccount = ref("");
+
 // 表格内容
 const tableData = ref();
-const searchAdmin = () => {};
-const clearInput = () => {};
-//控制弹窗
-// 创建管理员
+// 搜索函数
+const searchAdmin = async () => {
+	if (adminAccount.value == "") {
+		getFirstPageList();
+	} else {
+		tableData.value = await searchUser(adminAccount.value, "消息管理员");
+	}
+};
+// 分页数据
+const paginationData = reactive({
+	// 总页数
+	pageCount: 1,
+	// 当前所处页数
+	currentPage: 1,
+});
+const adminTotal = ref<number>(0);
+// 获取管理员的数量
+const returnAdminListLength = async () => {
+	const res = await getAdminListLength("消息管理员");
+	adminTotal.value = res.length;
+	paginationData.pageCount = Math.ceil(res.length / 10);
+};
+returnAdminListLength();
+// 默认获取第一页的数据据
+const getFirstPageList = async () => {
+	tableData.value = await returnListData(1, "消息管理员");
+};
+getFirstPageList();
+// 监听换页
+const currentChange = async (value: number) => {
+	paginationData.pageCount = value;
+	tableData.value = await returnListData(
+		paginationData.pageCount,
+		"消息管理员"
+	);
+};
+
+bus.on("adminDialogOff", async (id: number) => {
+	// 当前页数
+	const current = paginationData.currentPage;
+	// 1为创建管理员
+	if (id == 1) {
+		getFirstPageList();
+	}
+	// 2为编辑管理员
+	if (id == 2) {
+		tableData.value = await returnListData(
+			paginationData.currentPage,
+			"消息管理员"
+		);
+	}
+	// 3为对管理员进行降职
+	if (id == 3) {
+		tableData.value = await returnListData(
+			paginationData.currentPage,
+			"消息管理员"
+		);
+		if (tableData.value.length == 0) {
+			paginationData.currentPage = current - 1;
+			returnAdminListLength();
+		}
+	}
+});
+
+// 新建管理员
 const Create = ref();
 const openCreate = (id: number) => {
 	bus.emit("createId", id);
 	Create.value.open();
 };
-const openEdit = () => {};
-const openDelete = () => {};
+// 编辑管理员
+const edit_admin = ref();
+const openEdit = (id: number) => {
+	bus.emit("editId", id);
+	edit_admin.value.open();
+};
+// 降级管理员
+const delete_admin = ref();
+const openDelete = (id: number) => {
+	bus.emit("deleteId", id);
+	delete_admin.value.open();
+};
+onBeforeUnmount(() => {
+	bus.all.clear();
+});
 </script>
 
 <style lang="scss" scoped></style>
