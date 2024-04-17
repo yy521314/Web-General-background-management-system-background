@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-13 14:48:23
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-17 21:13:45
+ * @LastEditTime: 2024-04-17 23:31:59
  * @FilePath: \Web-General-background-management-system-background\src\views\set\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -148,10 +148,10 @@
 						</div>
 					</div>
 					<div class="account-infor-wrapped">
-						<span>公司架构:</span>
+						<span>公司要求:</span>
 						<div class="account-infor-content">
 							<el-button type="success" @click="openEditor(2)"
-								>编辑公司架构</el-button
+								>编辑公司要求</el-button
 							>
 						</div>
 					</div>
@@ -160,14 +160,6 @@
 						<div class="account-infor-content">
 							<el-button type="success" @click="openEditor(3)"
 								>编辑公司战略</el-button
-							>
-						</div>
-					</div>
-					<div class="account-infor-wrapped">
-						<span>公司高层:</span>
-						<div class="account-infor-content">
-							<el-button type="success" @click="openEditor(4)"
-								>编辑公司高层</el-button
 							>
 						</div>
 					</div>
@@ -631,6 +623,7 @@ const handleInputProductConfirm = async () => {
 		background: #fff;
 		.account-infor-wrapped {
 			display: flex;
+			overflow: hidden;
 			align-items: center;
 			padding-left: 50px;
 			margin-bottom: 24px;

@@ -51,16 +51,12 @@ bus.on("editorTitle", async (id: number) => {
 		valueHtml.value = await getCompanyIntroduce("公司介绍");
 	}
 	if (id == 2) {
-		title.value = "编辑公司架构";
-		valueHtml.value = await getCompanyIntroduce("公司架构");
+		title.value = "编辑公司要求";
+		valueHtml.value = await getCompanyIntroduce("公司要求");
 	}
 	if (id == 3) {
 		title.value = "编辑公司战略";
 		valueHtml.value = await getCompanyIntroduce("公司战略");
-	}
-	if (id == 4) {
-		title.value = "编辑高层介绍";
-		valueHtml.value = await getCompanyIntroduce("高层介绍");
 	}
 });
 // 编辑器实例，必须用 shallowRef
