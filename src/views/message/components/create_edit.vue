@@ -112,9 +112,6 @@ import { publishMessage, editMessage } from "@/api/message";
 import { getDepartment } from "@/api/setting";
 import { bus } from "@/utils/mitt";
 import { ElMessage } from "element-plus";
-import { changeUserReadList } from "@/api/dep_msg";
-import { useMsg } from "@/stores/message";
-const msgStore = useMsg();
 // 标题
 const title = ref();
 const user_name = JSON.parse(localStorage.getItem("userinfor"));
@@ -280,8 +277,6 @@ const yes = async () => {
 		formData.message_category = "公司公告";
 		const res = await publishMessage(formData);
 		if (res.status == 0) {
-			// await changeUserReadList(res.id, formData.message_receipt_object);
-			msgStore.returnReadList(user_name.id);
 			ElMessage({
 				message: "发布公告成功",
 				type: "success",
@@ -295,7 +290,6 @@ const yes = async () => {
 	}
 	if (title.value == "编辑公告") {
 		const res = await editMessage(formData);
-		msgStore.returnReadList(user_name.id);
 		if (res.status == 0) {
 			ElMessage({
 				message: "编辑公告成功",

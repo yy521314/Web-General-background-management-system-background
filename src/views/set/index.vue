@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-13 14:48:23
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-14 13:12:40
+ * @LastEditTime: 2024-04-17 21:13:45
  * @FilePath: \Web-General-background-management-system-background\src\views\set\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -122,7 +122,11 @@
 					</div>
 				</el-tab-pane>
 
-				<el-tab-pane label="公司信息" name="second">
+				<el-tab-pane
+					label="公司信息"
+					name="second"
+					v-if="userStore.identity == '超级管理员'"
+				>
 					<div class="account-infor-wrapped">
 						<span>公司名称:</span>
 						<div class="account-infor-content">
@@ -168,7 +172,11 @@
 						</div>
 					</div>
 				</el-tab-pane>
-				<el-tab-pane label="首页管理" name="third">
+				<el-tab-pane
+					label="首页管理"
+					name="third"
+					v-if="userStore.identity == '超级管理员'"
+				>
 					<div class="home-wrapped">
 						<!-- 提示 -->
 						<div class="tips">
@@ -209,7 +217,10 @@
 				</el-tab-pane>
 				<el-tab-pane label="其他设置" name="fourth"
 					><div class="other-set">
-						<div class="department-set">
+						<div
+							class="department-set"
+							v-if="userStore.identity !== '用户管理员'"
+						>
 							<span>部门设置</span>
 							<el-tag
 								v-for="tag in dynamicTags"
@@ -239,7 +250,13 @@
 								+ 添加部门
 							</el-button>
 						</div>
-						<div class="product-set">
+						<div
+							class="product-set"
+							v-if="
+								userStore.identity == '超级管理员' ||
+								userStore.identity == '产品管理员'
+							"
+						>
 							<span>产品设置</span>
 							<el-tag
 								v-for="tag in dynamicProductTags"
@@ -303,6 +320,8 @@ import {
 	getAllSwiper,
 	setDepartment,
 	getDepartment,
+	setProduct,
+	getProduct,
 } from "@/api/setting";
 const userStore = useUserInfor();
 const changeP = ref();
@@ -316,7 +335,6 @@ onMounted(async () => {
 	userData.identity = res.identity;
 	userData.name = res.name;
 	userData.sex = res.sex;
-	console.log(res);
 });
 
 //头像上传成功的函数
@@ -382,6 +400,7 @@ const userData = reactive({
 const breadcrumb = ref();
 const item = ref({
 	first: "系统设置",
+	second: "Setting",
 });
 //修该密码弹窗
 const openChangePassword = () => {
@@ -404,8 +423,6 @@ const saveName = async () => {
 //修改性别
 const saveSex = async () => {
 	const res = await changeSex(sessionStorage.getItem("id"), userData.sex);
-	console.log(res);
-
 	if (res.status == 0) {
 		ElMessage({
 			message: "更新成功",
@@ -438,8 +455,6 @@ returnCompanyName();
 
 // 修改公司名字
 const resetCompanyName = async () => {
-	console.log(companyName);
-
 	const res = await changeCompanyName(companyName.value);
 	if (res.status == 0) {
 		ElMessage({
@@ -510,10 +525,10 @@ const returnDepartment = async () => {
 };
 returnDepartment();
 // 获取产品数据
-// const returnProduct = async () => {
-// 	dynamicProductTags.value = await getProduct();
-// };
-// returnProduct();
+const returnProduct = async () => {
+	dynamicProductTags.value = await getProduct();
+};
+returnProduct();
 // 部门设置关闭时的函数
 const handleClose = async (tag: string) => {
 	dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1);
@@ -528,18 +543,20 @@ const handleClose = async (tag: string) => {
 	}
 };
 // 产品设置关闭时的函数
-// const handleProductClose = async (tag: string) => {
-// 	dynamicProductTags.value.splice(dynamicProductTags.value.indexOf(tag), 1)
-// 	const res = await setProduct(JSON.stringify(toRaw(dynamicProductTags.value)))
-// 	if (res.status == 0) {
-// 		ElMessage({
-// 			message: '删除产品成功',
-// 			type: 'success',
-// 		})
-// 	} else {
-// 		ElMessage.error('删除产品失败，请重新输入！')
-// 	}
-// }
+const handleProductClose = async (tag: string) => {
+	dynamicProductTags.value.splice(dynamicProductTags.value.indexOf(tag), 1);
+	const res = await setProduct(
+		JSON.stringify(toRaw(dynamicProductTags.value))
+	);
+	if (res.status == 0) {
+		ElMessage({
+			message: "删除产品成功",
+			type: "success",
+		});
+	} else {
+		ElMessage.error("删除产品失败，请重新输入！");
+	}
+};
 // 点击部门按钮出现输入框
 const showInput = () => {
 	inputVisible.value = true;
@@ -548,12 +565,12 @@ const showInput = () => {
 	});
 };
 // 点击产品按钮出现输入框
-// const showProductInput = () => {
-// 	inputProductVisible.value = true
-// 	nextTick(() => {
-// 		InputProductRef.value!.input!.focus()
-// 	})
-// }
+const showProductInput = () => {
+	inputProductVisible.value = true;
+	nextTick(() => {
+		InputProductRef.value!.input!.focus();
+	});
+};
 // 输入数据后的一个函数 部门
 const handleInputConfirm = async () => {
 	if (inputValue.value) {
@@ -574,22 +591,24 @@ const handleInputConfirm = async () => {
 	inputValue.value = "";
 };
 // 输入数据后的一个函数 产品
-// const handleInputProductConfirm = async () => {
-// 	if (inputProductValue.value) {
-// 		dynamicProductTags.value.push(inputProductValue.value)
-// 		const res = await setProduct(JSON.stringify(toRaw(dynamicProductTags.value)))
-// 		if (res.status == 0) {
-// 			ElMessage({
-// 				message: '添加产品设置成功',
-// 				type: 'success',
-// 			})
-// 		} else {
-// 			ElMessage.error('添加产品失败，请重新输入！')
-// 		}
-// 	}
-// 	inputProductVisible.value = false
-// 	inputProductValue.value = ''
-// }
+const handleInputProductConfirm = async () => {
+	if (inputProductValue.value) {
+		dynamicProductTags.value.push(inputProductValue.value);
+		const res = await setProduct(
+			JSON.stringify(toRaw(dynamicProductTags.value))
+		);
+		if (res.status == 0) {
+			ElMessage({
+				message: "添加产品设置成功",
+				type: "success",
+			});
+		} else {
+			ElMessage.error("添加产品失败，请重新输入！");
+		}
+	}
+	inputProductVisible.value = false;
+	inputProductValue.value = "";
+};
 </script>
 
 <style lang="scss" scoped>

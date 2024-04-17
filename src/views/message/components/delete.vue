@@ -18,9 +18,6 @@ import { onBeforeUnmount, ref } from "vue";
 import { bus } from "@/utils/mitt";
 import { firstDelete, recover, deleteMessage } from "@/api/message";
 import { ElMessage } from "element-plus";
-// import { changeUserReadListButDelete, changeUserReadList } from "@/api/dep_msg";
-import { useMsg } from "@/stores/message";
-const msgStore = useMsg();
 const title = ref();
 const tips = ref();
 // 消息ID
@@ -47,16 +44,11 @@ bus.on("realDelete", (id: number) => {
 const emit = defineEmits(["success"]);
 
 const operationMessage = async () => {
-	console.log(messageId.value);
-
 	if (title.value == "删除信息") {
 		const res = await firstDelete(messageId.value);
+		console.log(messageId.value);
+
 		if (res.status == 0) {
-			// await changeUserReadListButDelete(
-			// 	messageId.value,
-			// 	department.value
-			// );
-			msgStore.returnReadList(user_name.id);
 			ElMessage({
 				message: "删除公告成功",
 				type: "success",
@@ -71,8 +63,6 @@ const operationMessage = async () => {
 	if (title.value == "恢复消息") {
 		const res = await recover(messageId.value);
 		if (res.status == 0) {
-			await changeUserReadList(messageId.value, department.value);
-			msgStore.returnReadList(user_name.id);
 			ElMessage({
 				message: "恢复公告成功",
 				type: "success",

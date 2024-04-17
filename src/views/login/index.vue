@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-11 13:06:42
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-03-14 23:47:54
+ * @LastEditTime: 2024-04-17 21:15:59
  * @FilePath: \Web-General-background-management-system-background\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -123,18 +123,27 @@
 import { ref, reactive } from "vue";
 import forget from "./components/forget_password.vue";
 const activeName = ref("first");
-import { login, register } from "@/api/login";
+import { login, register, returnMenuList } from "@/api/login";
 import { log } from "console";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import { useUserInfor } from "@/stores/userinfor";
+import { loginLog } from "@/api/log";
+import { getUserInfor } from "@/api/userinfor";
+import { useMenu } from "@/stores/menu";
 const store = useUserInfor();
-
+const menuStore = useMenu();
 interface formData {
 	account: null | number;
 	password: string;
 	repassword?: string;
 }
+interface user {
+	account: null | number;
+	name: string;
+	email: string;
+}
+const user = reactive({});
 //登录账号数据
 const loginData: formData = reactive({
 	account: null,
@@ -146,7 +155,10 @@ const registerData: formData = reactive({
 	password: "",
 	repassword: "",
 });
-
+const getUser = async (id: number) => {
+	const res = await getUserInfor(id);
+	loginLog(res.account, res.name, res.email);
+};
 //login
 const router = useRouter();
 const Login = async () => {
@@ -154,13 +166,16 @@ const Login = async () => {
 	const { token } = res;
 	if (res.message === "登录成功") {
 		const { id } = res.results;
+		const routerList = (await returnMenuList(id)) as any;
+		menuStore.setRouter(routerList);
 		ElMessage({
 			message: "登录成功！",
 			type: "success",
 		});
-		localStorage.setItem("toke", token);
+		localStorage.setItem("token", token);
 		sessionStorage.setItem("id", id);
 		store.userInfo(id);
+		getUser(id);
 		router.push("home");
 	} else {
 		ElMessage.error("登录失败，注意检查账号密码");

@@ -9,17 +9,29 @@
 						<el-icon><House /></el-icon>
 						<span>首页 </span>
 					</el-menu-item>
-					<el-menu-item index="overview">
+					<el-menu-item
+						index="overview"
+						v-if="userStore.identity == '超级管理员'"
+					>
 						<el-icon><icon-menu /></el-icon>
 						<span>系统概览 </span>
 					</el-menu-item>
 					<!-- 分层菜单用户管理  -->
-					<el-sub-menu index="3">
+					<el-sub-menu
+						index="3"
+						v-if="
+							userStore.identity == '超级管理员' ||
+							userStore.identity == '用户管理员'
+						"
+					>
 						<template #title>
 							<el-icon><User /></el-icon>
 							<span>用户管理</span>
 						</template>
-						<el-menu-item-group title="管理员管理">
+						<el-menu-item-group
+							title="管理员管理"
+							v-if="userStore.identity == '超级管理员'"
+						>
 							<el-menu-item index="product_manage"
 								>产品管理员</el-menu-item
 							>
@@ -37,7 +49,14 @@
 						</el-menu-item-group>
 					</el-sub-menu>
 					<!-- 产品管理 -->
-					<el-sub-menu index="4">
+					<el-sub-menu
+						index="4"
+						v-if="
+							userStore.identity == '超级管理员' ||
+							userStore.identity == '产品管理员' ||
+							userStore.identity == '用户'
+						"
+					>
 						<template #title>
 							<el-icon><HomeFilled /></el-icon>
 							<span>产品管理</span>
@@ -54,7 +73,13 @@
 						</el-menu-item-group>
 					</el-sub-menu>
 					<!-- 消息管理 -->
-					<el-sub-menu index="5">
+					<el-sub-menu
+						index="5"
+						v-if="
+							userStore.identity == '消息管理员' ||
+							userStore.identity == '超级管理员'
+						"
+					>
 						<template #title>
 							<el-icon><ChatRound /></el-icon>
 							<span>消息管理</span>
@@ -66,15 +91,24 @@
 
 						<el-menu-item index="recycle">回收站</el-menu-item>
 					</el-sub-menu>
-					<el-menu-item index="file">
+					<el-menu-item
+						index="file"
+						v-if="userStore.identity == '超级管理员'"
+					>
 						<el-icon><Memo /></el-icon>
 						<span>合同管理</span>
 					</el-menu-item>
-					<el-menu-item index="7">
+					<el-menu-item
+						index="operation_log"
+						v-if="userStore.identity == '超级管理员'"
+					>
 						<el-icon><icon-menu /></el-icon>
 						<span>操作日志</span>
 					</el-menu-item>
-					<el-menu-item index="8">
+					<el-menu-item
+						index="login_log"
+						v-if="userStore.identity == '超级管理员'"
+					>
 						<el-icon><Upload /></el-icon>
 						<span>登录日志</span>
 					</el-menu-item>
@@ -87,21 +121,14 @@
 			<el-container>
 				<el-header>
 					<span class="hander-left-content"
-						>尊敬的 {{ store.name }} 欢迎您登录本系统</span
+						>尊敬的 {{ userStore.name }} 欢迎您登录本系统</span
 					>
 					<div class="hander-right-content">
-						<el-icon><Message /></el-icon>
-						<el-avatar :size="24" :src="store.imageUrl" />
+						<el-avatar :size="24" :src="userStore.imageUrl" />
 						<el-dropdown>
 							<span class="el-dropdown-link"> 设置 </span>
 							<template #dropdown>
 								<el-dropdown-menu>
-									<el-dropdown-item
-										>设置账号</el-dropdown-item
-									>
-									<el-dropdown-item
-										>更改头像</el-dropdown-item
-									>
 									<el-dropdown-item @click="goLogin"
 										>退出登录</el-dropdown-item
 									>
@@ -123,7 +150,7 @@ import { Menu as IconMenu } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 import { useUserInfor } from "@/stores/userinfor";
-const store = useUserInfor();
+const userStore = useUserInfor();
 
 const goLogin = () => {
 	router.push("login");
@@ -183,8 +210,11 @@ const goLogin = () => {
 	.hander-right-content {
 		width: 180px;
 		display: flex;
-		justify-content: space-around;
-		align-items: center;
+		justify-content: flex-end;
+		.el-dropdown-link[data-v-cfd38c0b] {
+			margin-left: 15px;
+			line-height: 23.5px;
+		}
 	}
 }
 

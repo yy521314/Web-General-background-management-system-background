@@ -107,7 +107,6 @@ const tableData = ref([]);
 //出库产品获取
 const auditProductlist = async () => {
 	tableData.value = await auditProductList();
-	console.log(tableData.value);
 };
 auditProductlist();
 

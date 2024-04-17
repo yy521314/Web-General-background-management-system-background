@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-04-15 12:10:41
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-15 21:49:19
+ * @LastEditTime: 2024-04-16 15:21:35
  * @FilePath: \Web-General-background-management-system-background\src\views\product\components\audit.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -31,7 +31,7 @@ import { onBeforeUnmount, ref, reactive } from "vue";
 import { bus } from "@/utils/mitt";
 import { auditProduct } from "@/api/product";
 import { ElMessage } from "element-plus";
-// import { tracking } from '@/utils/operation'
+import { tracking } from "@/utils/operation";
 const user_name = JSON.parse(localStorage.getItem("userinfor"));
 bus.on("productAudit", (row: any) => {
 	formData.id = row.id;
@@ -70,7 +70,13 @@ const audit = async () => {
 			type: "success",
 		});
 		emit("success");
-		// await tracking('产品', localStorage.getItem('name') as unknown as string, formData.product_name, '高级',formData.product_out_status)
+		await tracking(
+			"产品",
+			user_name.name as unknown as string,
+			formData.product_name,
+			"高级",
+			formData.product_out_status
+		);
 		dialogFormVisible.value = false;
 	} else {
 		ElMessage.error("审核产品失败");

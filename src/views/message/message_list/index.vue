@@ -224,9 +224,7 @@
 												>
 												<el-button
 													type="danger"
-													@click="
-														deleteMessage(row.id)
-													"
+													@click="deleteMessage(row)"
 													>删除</el-button
 												>
 											</div>
@@ -341,9 +339,9 @@ const getCompanyFirstPageList = async () => {
 getCompanyFirstPageList();
 //获取全部公告按钮
 const getCompanyFirstPageListA = async () => {
+	getCompanyFirstPageList();
 	department.value = "";
 	radio2.value = "";
-	getCompanyFirstPageList();
 };
 // 默认获取系统消息第一页的数据
 const getSystemFirstPageList = async () => {
@@ -353,6 +351,10 @@ getSystemFirstPageList();
 
 // 更新公司公告列表及系统消息列表的第一页数据
 const changeTwoPageList = () => {
+	paginationData.companyCurrentPage = 1;
+	paginationData.systemCurrentPage = 1;
+	getSystemListLength();
+	getCompanyListLength();
 	getCompanyFirstPageList();
 	getSystemFirstPageList();
 };

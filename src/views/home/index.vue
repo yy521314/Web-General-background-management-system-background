@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-11 23:32:06
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-15 17:22:38
+ * @LastEditTime: 2024-04-16 22:44:22
  * @FilePath: \Web-General-background-management-system-background\src\views\home\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -39,39 +39,98 @@
 		</div>
 		<!-- 表格外壳 -->
 		<div class="two-table-wrapped">
+			<!-- 公司公告 -->
 			<div class="company-notice">
 				<span class="title">公司公告</span>
 				<el-table
-					:data="tableData"
+					:data="companyData"
 					style="width: 100%"
 					:show-header="false"
+					@row-dblclick="openCompany"
 				>
-					<el-table-column prop="date" label="Date" width="180" />
-					<el-table-column prop="name" label="Name" width="180" />
-					<el-table-column prop="address" label="Address" />
+					<el-table-column prop="message_title" label="公告主题">
+						<template #default="{ row }">
+							<div class="message_title">
+								{{ row.message_title }}
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column prop="message_level" label="等级">
+						<template #default="{ row }">
+							<el-tag
+								class="mx-1"
+								round
+								v-if="row.message_level == '一般'"
+								>{{ row.message_level }}</el-tag
+							>
+							<el-tag
+								type="warning"
+								class="mx-1"
+								round
+								v-if="row.message_level == '重要'"
+								>{{ row.message_level }}</el-tag
+							>
+							<el-tag
+								type="danger"
+								class="mx-1"
+								round
+								v-if="row.message_level == '必要'"
+								>{{ row.message_level }}</el-tag
+							>
+						</template>
+					</el-table-column>
+					<el-table-column
+						prop="message_publish_department"
+						label="发布部门"
+					/>
+					<el-table-column
+						prop="message_publish_time"
+						label="发布时间"
+						width="200"
+					>
+						<template #default="{ row }">
+							<div>
+								{{ row.message_publish_time?.slice(0, 10) }}
+							</div>
+						</template>
+					</el-table-column>
 				</el-table>
 			</div>
 			<!-- 系统消息 -->
 			<div class="system-message">
 				<span class="title">系统消息</span>
 				<el-table
-					:data="tableData"
+					:data="systemData"
 					style="width: 100%"
 					:show-header="false"
+					@row-dblclick="openSystem"
 				>
-					<el-table-column prop="date" label="Date" width="180" />
-					<el-table-column prop="name" label="Name" width="180" />
-					<el-table-column prop="address" label="Address" />
+					<el-table-column prop="message_title" label="公告主题" />
+					<el-table-column
+						prop="message_publish_time"
+						label="发布时间"
+						width="200"
+					>
+						<template #default="{ row }">
+							<div>
+								{{ row.message_publish_time?.slice(0, 10) }}
+							</div>
+						</template>
+					</el-table-column>
 				</el-table>
 			</div>
 		</div>
 	</div>
+	<common ref="common_msg"></common>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
 import breadCrumb from "@/components/bread_crumb.vue";
 import { getAllSwiper, getAllCompanyIntroduce } from "@/api/setting";
+import { bus } from "@/utils/mitt";
+import { companyMessageList, systemMessageList } from "@/api/message";
+import common from "@/components/common_msg.vue";
 // 面包屑
 const breadcrumb = ref();
 const item = ref({
@@ -85,6 +144,26 @@ const tableData = [
 		address: "No. 189, Grove St, Los Angeles",
 	},
 ];
+// 公司公告
+const companyData = ref();
+// 系统消息
+const systemData = ref();
+
+const getMessageList = async () => {
+	companyData.value = await companyMessageList();
+	systemData.value = await systemMessageList();
+};
+getMessageList();
+//底部部门信息通知组件
+const common_msg = ref();
+const openCompany = (row: any) => {
+	bus.emit("homeCompany", row);
+	common_msg.value.open();
+};
+const openSystem = (row: any) => {
+	bus.emit("homeSystem", row);
+	common_msg.value.open();
+};
 // 轮播图
 const imageUrl = ref([]);
 // 获取轮播图
