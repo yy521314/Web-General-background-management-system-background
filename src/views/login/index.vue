@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-11 13:06:42
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-17 21:15:59
+ * @LastEditTime: 2024-04-17 22:33:53
  * @FilePath: \Web-General-background-management-system-background\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,7 +11,14 @@
 		<el-container>
 			<el-header class="header-wrapped">
 				<div class="header-content">
-					<h3>通用后台管理系统</h3>
+					<h3>
+						<img
+							src="@/../public/tubiao.jpg"
+							alt=""
+							class="img_img"
+						/>
+						<p>温馨客栈管理系统</p>
+					</h3>
 					<span class="welcome">欢迎您的登录！</span>
 				</div>
 			</el-header>
@@ -110,9 +117,7 @@
 				</div>
 			</el-main>
 			<el-footer class="footer-wrapped">
-				<div class="footer-content">
-					作品在github搜索yybb99999用户仓库中，希望可以点点star
-				</div>
+				<div class="footer-content">此处填写备案信息，略。。。。</div>
 			</el-footer>
 		</el-container>
 	</div>
@@ -208,37 +213,52 @@ const openForget = () => {
 
 <style lang="scss" scoped>
 .common-layout {
-	width: 1280px;
+	width: 100vw;
+	height: 100vh;
 	background: url("@/assets/code.png") no-repeat center;
 	align-items: flex-start;
 	overflow: hidden;
 }
 .header-wrapped {
+	width: 100%;
+	height: 100%;
 	display: flex;
 	justify-content: space-around;
 	background-color: black;
 	opacity: 0.6;
 	.header-content {
 		color: white;
-		width: 1200px;
+		height: 8.5vh;
+		width: 100vw;
 		margin: 0 auto;
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
 		font-size: 20px;
 		font-weight: 500;
-		.welcome {
-			font-style: 13px;
+		span .welcome {
+			font-size: 24px;
 			font-weight: 300;
+		}
+		h3 {
+			display: flex;
+			line-height: 8.5vh;
+			height: 8.5vh;
+			vertical-align: baseline;
+			.img_img {
+				width: 8.5vh;
+				height: 8.5vh;
+			}
 		}
 	}
 }
 .el-main {
 	--el-main-padding: 0px;
-	height: 600px;
+	width: 100%;
+	height: 100%;
 	.login_wrapped {
 		width: 1200px;
-		height: 600px;
+		height: 83vh;
 		margin: 0 auto;
 		.box-card {
 			.el-button {
@@ -288,8 +308,10 @@ const openForget = () => {
 	}
 }
 .footer-wrapped {
+	width: 100%;
+	height: 100%;
 	.footer-content {
-		margin-top: 8px;
+		margin-top: 2vh;
 		text-align: center;
 	}
 }

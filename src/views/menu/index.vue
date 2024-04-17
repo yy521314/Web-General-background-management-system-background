@@ -3,7 +3,14 @@
 		<el-container class="abc">
 			<el-aside width="250px">
 				<el-menu class="el-menu-vertical-demo" router>
-					<div class="title">温馨客栈管理系统</div>
+					<div class="title">
+						<img
+							src="@/../public/tubiao.jpg"
+							alt=""
+							class="img_img"
+						/>
+						<p>温馨客栈管理系统</p>
+					</div>
 					<!-- 菜单栏 -->
 					<el-menu-item index="home">
 						<el-icon><House /></el-icon>
@@ -121,7 +128,7 @@
 			<el-container>
 				<el-header>
 					<span class="hander-left-content"
-						>尊敬的 {{ userStore.name }} 欢迎您登录本系统</span
+						>尊敬的 {{ userStore.name }} 欢迎您来到温馨客栈！</span
 					>
 					<div class="hander-right-content">
 						<el-avatar :size="24" :src="userStore.imageUrl" />
@@ -170,11 +177,20 @@ const goLogin = () => {
 	overflow: hidden;
 	width: 250px;
 	.title {
-		padding: 20px;
+		display: flex;
+		.img_img {
+			width: 40px;
+			height: 40px;
+		}
+		p {
+			line-height: 40px;
+		}
+		padding: 15px;
 		display: flex;
 		justify-content: center;
 		color: #fff;
 		background: #272c35;
+		width: 100%;
 	}
 	.el-menu-item {
 		width: 20vh;
