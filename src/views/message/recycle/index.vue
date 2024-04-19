@@ -135,7 +135,6 @@ const realDelete = (id: number) => {
 	.table-top {
 		display: flex;
 		flex-direction: column;
-
 		.table-content {
 			padding: 10px 20px 20px;
 			margin-bottom: 8px;

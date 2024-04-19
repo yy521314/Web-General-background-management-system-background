@@ -10,6 +10,7 @@
 							<div class="module-common-header">
 								<div class="search-wrapped">
 									<el-select
+										class="select-impart"
 										v-model="department"
 										placeholder="请选择部门"
 										@change="getListByDepartment"
@@ -50,6 +51,7 @@
 								<el-table
 									:data="companyTableData"
 									border
+									label-width="10px"
 									style="width: 100%"
 								>
 									<el-table-column
@@ -415,10 +417,24 @@ const deleteMessage = (row: any) => {
 </script>
 
 <style lang="scss" scoped>
-.el-radio-group {
-	margin-left: 20px;
+.module-common-header {
 }
-
+.search-wrapped {
+	width: 100%;
+	.el-radio-group {
+		width: 30vw;
+		margin-left: 20px;
+	}
+	.select-impart {
+		width: 10vw;
+	}
+}
+.button-wrapped {
+	width: 13vw;
+}
+.module-common-table {
+	overflow: auto;
+}
 :deep(.el-table .cell) {
 	font-weight: 400;
 }

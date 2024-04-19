@@ -1,6 +1,6 @@
 <template>
 	<div class="common-layout">
-		<el-container class="abc">
+		<el-container>
 			<el-aside width="250px">
 				<el-menu class="el-menu-vertical-demo" router>
 					<div class="title">
@@ -100,7 +100,10 @@
 					</el-sub-menu>
 					<el-menu-item
 						index="file"
-						v-if="userStore.identity == '超级管理员'"
+						v-if="
+							userStore.identity == '超级管理员' ||
+							userStore.identity == '产品管理员'
+						"
 					>
 						<el-icon><Memo /></el-icon>
 						<span>合同管理</span>
@@ -166,7 +169,8 @@ const goLogin = () => {
 
 <style lang="scss" scoped>
 .common-layout {
-	width: 87vw;
+	width: 100%;
+	height: 100%;
 }
 .el-container {
 	width: 50rem;
@@ -175,9 +179,10 @@ const goLogin = () => {
 	height: 100vh;
 	background: #2b303b;
 	overflow: hidden;
-	width: 250px;
+	width: 13vw;
 	.title {
 		display: flex;
+		width: 13vw;
 		.img_img {
 			width: 40px;
 			height: 40px;
@@ -190,16 +195,15 @@ const goLogin = () => {
 		justify-content: center;
 		color: #fff;
 		background: #272c35;
-		width: 100%;
 	}
 	.el-menu-item {
-		width: 20vh;
+		width: 13vw;
 		color: #fff;
 	}
 	// 菜单
 	.el-menu {
 		background: #2b303b;
-		width: 250px;
+		width: 13vw;
 		height: 100vh;
 		border-right: 0;
 	}
@@ -211,7 +215,7 @@ const goLogin = () => {
 	cursor: pointer;
 }
 .el-header {
-	width: 73vw;
+	width: 87vw;
 	display: flex;
 	height: 55px;
 	background: #262f3e;
@@ -241,7 +245,7 @@ const goLogin = () => {
 }
 
 .el-main {
-	width: 73vw;
+	width: 87vw;
 	--el-main-padding: 0;
 	background-color: #f3f4fa;
 }

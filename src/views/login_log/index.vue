@@ -35,6 +35,7 @@
 						prop="login_time"
 						label="登录时间"
 						width="200"
+						sortable
 					>
 						<template #default="{ row }">
 							<div>{{ row.login_time?.slice(0, 16) }}</div>
@@ -98,6 +99,7 @@ getLoginListLength();
 // 默认获取登录次数列表第一页的数据
 const getLoginFirstPageList = async () => {
 	tableData.value = (await returnLoginListData(1)) as any;
+	console.log(tableData.value);
 };
 getLoginFirstPageList();
 
@@ -111,7 +113,11 @@ const loginCurrentChange = async (value: number) => {
 const account = ref();
 // 搜索之后函数
 const searchLoginAccount = async () => {
-	tableData.value = (await searchLoginLogList(account.value)) as any;
+	if (account == "") {
+		getLoginFirstPageList();
+	} else {
+		tableData.value = (await searchLoginLogList(account.value)) as any;
+	}
 };
 
 const tip = ref();

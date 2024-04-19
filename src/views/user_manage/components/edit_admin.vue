@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-04-13 16:45:27
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-13 20:55:05
+ * @LastEditTime: 2024-04-18 15:39:16
  * @FilePath: \Web-General-background-management-system-background\src\views\user_manage\components\create_admin.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -44,7 +44,12 @@
 						v-model="formDataInfo.department"
 						placeholder="请选择部门"
 					>
-						<el-option label="总裁办" value="总裁办" />
+						<el-option
+							v-for="item in departmentData"
+							:key="item"
+							:label="item"
+							:value="item"
+						/>
 					</el-select>
 				</el-form-item>
 			</el-form>
@@ -62,6 +67,7 @@ import { reactive, ref, onBeforeUnmount } from "vue";
 import { bus } from "@/utils/mitt";
 import { getUserInfor, editAdmin } from "@/api/userinfor";
 import { ElMessage } from "element-plus";
+import { getDepartment } from "@/api/setting";
 
 //title动态标题
 const title = ref();
@@ -84,6 +90,12 @@ const formDataInfo: FormData = reactive({
 	department: "",
 	identity: "产品管理员",
 });
+//获取部门信息
+const departmentData = ref([]);
+const returnDepartment = async () => {
+	departmentData.value = await getDepartment();
+};
+returnDepartment();
 //bus
 //bus接收
 bus.on("editId", async (id: number) => {

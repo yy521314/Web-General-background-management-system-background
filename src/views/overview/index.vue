@@ -12,9 +12,7 @@
 					<span class="department"
 						>所属部门：{{ userData.department }}</span
 					>
-					<div class="company">
-						所属公司：济南晏鲸创意设计有限公司
-					</div>
+					<div class="company">所属公司：{{ company }}</div>
 				</div>
 				<!-- 竖线 -->
 				<div class="line-wrapped">
@@ -125,6 +123,8 @@ import {
 	getDayAndNumber,
 } from "@/api/overview.js";
 import { getUserInfor } from "@/api/userinfor";
+import { getCompanyName } from "@/api/setting";
+import { login } from "@/api/login";
 onMounted(() => {
 	manageUser();
 	productCategoryBar();
@@ -132,6 +132,11 @@ onMounted(() => {
 	massageAllDay();
 });
 const userStore = useUserInfor();
+let company = ref();
+const getCompany = async () => {
+	company = await getCompanyName();
+};
+getCompany();
 // 面包屑
 const breadcrumb = ref();
 // 面包屑参数

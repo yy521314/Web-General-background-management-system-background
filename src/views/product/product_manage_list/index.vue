@@ -7,6 +7,7 @@
 				v-model="activeName"
 				class="demo-tabs"
 				@tab-click="handleClick"
+				v-if="123"
 			>
 				<el-tab-pane label="产品列表" name="first">
 					<div class="pane-content">
@@ -30,6 +31,11 @@
 								</div>
 								<div class="button-wrapped">
 									<el-button
+										v-if="
+											userStore.identity ==
+												'超级管理员' ||
+											userStore.identity == '产品管理员'
+										"
 										type="primary"
 										@click="productInWarehouse"
 										>产品入库</el-button
@@ -179,6 +185,12 @@
 													>申请出库</el-button
 												>
 												<el-button
+													v-if="
+														userStore.identity ==
+															'超级管理员' ||
+														userStore.identity ==
+															'产品管理员'
+													"
 													@click="editProduct(row)"
 													type="success"
 													:disabled="
@@ -188,6 +200,12 @@
 													>修改</el-button
 												>
 												<el-button
+													v-if="
+														userStore.identity ==
+															'超级管理员' ||
+														userStore.identity ==
+															'产品管理员'
+													"
 													@click="
 														deleteProduct(row.id)
 													"
@@ -219,7 +237,14 @@
 						</div>
 					</div>
 				</el-tab-pane>
-				<el-tab-pane label="审核列表" name="second">
+				<el-tab-pane
+					label="审核列表"
+					name="second"
+					v-if="
+						userStore.identity == '超级管理员' ||
+						userStore.identity == '产品管理员'
+					"
+				>
 					<div class="pane-content">
 						<div class="pane-top">
 							<div class="module-common-header">
@@ -421,6 +446,9 @@ import {
 import { bus } from "@/utils/mitt";
 import { Search } from "@element-plus/icons-vue";
 import type { TabsPaneContext } from "element-plus";
+import { useUserInfor } from "@/stores/userinfor";
+import { log } from "console";
+const userStore = useUserInfor();
 // 面包屑
 const breadcrumb = ref();
 // 面包屑参数
@@ -438,7 +466,6 @@ const handleClick = (tab: TabsPaneContext) => {
 };
 
 const activeName = ref("first");
-
 // 产品入库编号
 const productId = ref<number>();
 // 产品申请出库编号

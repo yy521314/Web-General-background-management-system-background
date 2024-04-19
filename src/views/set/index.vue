@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-13 14:48:23
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-17 23:31:59
+ * @LastEditTime: 2024-04-18 16:56:11
  * @FilePath: \Web-General-background-management-system-background\src\views\set\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -207,11 +207,21 @@
 						</div>
 					</div>
 				</el-tab-pane>
-				<el-tab-pane label="其他设置" name="fourth"
+				<el-tab-pane
+					label="其他设置"
+					name="fourth"
+					v-if="
+						userStore.identity == '超级管理员' ||
+						userStore.identity == '用户管理员' ||
+						userStore.identity == '产品管理员'
+					"
 					><div class="other-set">
 						<div
 							class="department-set"
-							v-if="userStore.identity !== '用户管理员'"
+							v-if="
+								userStore.identity == '超级管理员' ||
+								userStore.identity == '用户管理员'
+							"
 						>
 							<span>部门设置</span>
 							<el-tag

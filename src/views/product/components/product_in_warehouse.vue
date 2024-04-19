@@ -38,8 +38,7 @@
 						v-model="formData.product_unit"
 						placeholder="请选择产品单位"
 					>
-						<el-option label="个" value="个" />
-						<el-option label="件" value="件" />
+						<el-option label="间" value="间" />
 					</el-select>
 				</el-form-item>
 				<el-form-item
@@ -77,8 +76,10 @@ import { createProduct } from "@/api/product";
 import { ElMessage } from "element-plus";
 import { getProduct } from "@/api/setting";
 const labelPosition = ref("left");
-// const title = ref()
+import { getUserInfor } from "@/api/userinfor";
 
+// const title = ref()
+const userInfo = ref();
 // 产品类别数据
 const categoryData = ref([]);
 const returnProduct = async () => {
