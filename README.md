@@ -1,6 +1,6 @@
 # Web-General-background-management-system-background
 
-前端部分-后台通用管理系统
+前端部分-温馨客栈管理系统
 
 ## Recommended IDE Setup
 
