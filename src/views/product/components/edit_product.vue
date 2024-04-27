@@ -151,17 +151,28 @@ const rules = reactive({
 const emit = defineEmits(["success"]);
 // 编辑产品信息
 const edit = async () => {
-	const res = await editProduct(formData);
-	if (res.status == 0) {
-		ElMessage({
-			message: "编辑产品信息成功",
-			type: "success",
-		});
-		emit("success");
+	let temp = ref(true);
+	for (let key in formData) {
+		if (formData[key] == "") {
+			temp.value = false;
+		}
+	}
+	if (temp) {
+		ElMessage.error("产品入库失败,请检查数据是否有空！");
 		dialogFormVisible.value = false;
 	} else {
-		ElMessage.error("编辑产品信息失败");
-		dialogFormVisible.value = false;
+		const res = await editProduct(formData);
+		if (res.status == 0) {
+			ElMessage({
+				message: "编辑产品信息成功",
+				type: "success",
+			});
+			emit("success");
+			dialogFormVisible.value = false;
+		} else {
+			ElMessage.error("编辑产品信息失败");
+			dialogFormVisible.value = false;
+		}
 	}
 };
 // 弹窗开关

@@ -15,7 +15,8 @@
 		"paths": {
 			"@": ["src"],
 			"@/*": ["src/*"]
-		}
+		},
+		"noEmit": true
 	},
 	"include": [
 		"src/**/*.ts",
@@ -24,6 +25,5 @@
 		"src/**/*.vue",
 		"*.ts",
 		"src/router/index.ts"
-	],
-	"references": [{ "path": "./tsconfig.node.json" }]
+	]
 }

@@ -2,7 +2,7 @@
  * @Author: 'yang' '1173278084@qq.com'
  * @Date: 2024-03-11 13:06:42
  * @LastEditors: 'yang' '1173278084@qq.com'
- * @LastEditTime: 2024-04-17 22:33:53
+ * @LastEditTime: 2024-04-25 12:36:44
  * @FilePath: \Web-General-background-management-system-background\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -22,6 +22,12 @@
 					<span class="welcome">欢迎您的登录！</span>
 				</div>
 			</el-header>
+			<div class="ceshi">
+				测试账号密码 ：<br />
+				超级管理员：123456 w123456 <br />产品管理员：111111 w111111<br />
+				用户管理员：222222 w222222 <br />消息管理员：333333 w333333
+				<br />用户：666666 w666666
+			</div>
 			<el-main>
 				<div class="login_wrapped">
 					<el-card class="box-card">
@@ -314,5 +320,15 @@ const openForget = () => {
 		margin-top: 2vh;
 		text-align: center;
 	}
+}
+.ceshi {
+	background-color: black;
+	opacity: 0.6;
+	font-weight: 500;
+	font-size: 32px;
+	position: absolute;
+	bottom: 0;
+	left: 40%;
+	color: #fff;
 }
 </style>

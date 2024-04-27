@@ -134,17 +134,28 @@ const rules = reactive({
 const emit = defineEmits(["success"]);
 // 产品入库
 const add = async () => {
-	const res = await createProduct(formData);
-
-	if (res.status == 0) {
-		ElMessage({
-			message: "产品入库成功",
-			type: "success",
-		});
-		emit("success");
-		dialogFormVisible.value = false;
+	let temp = ref(true);
+	for (let key in formData) {
+		if (formData[key] == "") {
+			temp.value = false;
+		}
+		console.log(temp.value);
+	}
+	if (temp.value) {
+		const res = await createProduct(formData);
+		if (res.status == 0) {
+			ElMessage({
+				message: "产品入库成功",
+				type: "success",
+			});
+			emit("success");
+			dialogFormVisible.value = false;
+		} else {
+			ElMessage.error("产品入库失败,请检查编号是否重复！");
+			dialogFormVisible.value = false;
+		}
 	} else {
-		ElMessage.error("产品入库失败");
+		ElMessage.error("产品入库失败,请检查数据是否有空！");
 		dialogFormVisible.value = false;
 	}
 };

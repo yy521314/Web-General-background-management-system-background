@@ -130,7 +130,9 @@ const applyProduct = async () => {
 		emit("success");
 		dialogFormVisible.value = false;
 	} else {
-		ElMessage.error("产品申请出库失败");
+		ElMessage.error(
+			"产品申请出库失败，请检查出库编号是否已经存在于出库列表！"
+		);
 		dialogFormVisible.value = false;
 	}
 };

@@ -113,7 +113,7 @@ const loginCurrentChange = async (value: number) => {
 const account = ref();
 // 搜索之后函数
 const searchLoginAccount = async () => {
-	if (account == "") {
+	if (account.value == "") {
 		getLoginFirstPageList();
 	} else {
 		tableData.value = (await searchLoginLogList(account.value)) as any;
